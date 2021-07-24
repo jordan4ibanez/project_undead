@@ -1,9 +1,9 @@
 ## API information for project undead
 
 ### register_tile 
-this is a wrapper for minetest.register node, which makes it simpler to add nodes, now called tiles, into the game
+This is a wrapper for minetest.register node, which makes it simpler to add nodes, now called tiles, into the game.
 
-any tiles left out will be defined with "invisible.png" to ease up the hardware rendering/engine processing
+Any tile texture definitions left out will be defined with "invisible.png" to ease up the hardware rendering/engine processing.
 ```
 register_tile(
     top_texture = "blah.png",
