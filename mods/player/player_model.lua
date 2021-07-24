@@ -1,12 +1,33 @@
 local get_player_by_name = minetest.get_player_by_name
 
+-- animation localities
 local player = nil
-local old_control_bits = 0
 local control_bits = 0
-
 local hitting = false
 local crouching = false
 local moving = false
+
+-- avoids table look ups
+
+local stand_begin = 0
+local stand_end = 80
+
+local sit_begin = 81
+local sit_end = 161
+
+local lay_begin = 162
+local lay_end = 167
+
+local walk_begin = 168
+local walk_end = 188
+
+local hit_begin = 189
+local hit_end = 199
+
+local walk_hit_begin = 200
+local walk_hit_end = 220
+
+
 
 minetest.register_entity(":player_model",{
     visual = "mesh",
@@ -15,7 +36,7 @@ minetest.register_entity(":player_model",{
     pointable = false,
     visual_size = {x = 1.1, y = 1.1},
     attached_player = nil,
-    timer = 0,
+    current_animation = 0,
     on_step = function(self, dtime)
         if (self.attached_player == nil) then
             self.object:remove()
@@ -34,8 +55,8 @@ minetest.register_entity(":player_model",{
         crouching = false
         moving = false
         hitting = false
+
         control_bits = player:get_player_control_bits()
-        old_control_bits = control_bits
 
         -- zoom
         if (control_bits >= 512) then
@@ -96,8 +117,24 @@ minetest.register_entity(":player_model",{
         end
 
 
-        -- do animation
+        -- digest booleans and do animation
 
+        if (moving and hitting and self.current_animation ~= 3) then
+            self.object:set_animation({ x = walk_hit_begin, y = walk_hit_end }, 20, 0, true)
+            self.current_animation = 3
+        elseif (moving and not hitting and self.current_animation ~= 2) then
+            self.object:set_animation({ x = walk_begin, y = walk_end }, 20, 0, true)
+            self.current_animation = 2
+        elseif (hitting and not moving and self.current_animation ~= 1) then
+            self.object:set_animation({ x = hit_begin, y = hit_end }, 20, 0, true)
+            self.current_animation = 1
+        elseif (not hitting and not moving and self.current_animation ~= 0) then
+            self.object:set_animation({ x = stand_begin, y = stand_end }, 20, 0, true)
+            self.current_animation = 0
+        end
+
+        -- crouching needs an animation
+        --[[
         if (crouching) then
             print("I am crouching")
         end
@@ -109,7 +146,7 @@ minetest.register_entity(":player_model",{
         if (hitting) then
             print("I am hitting")
         end
-
+        ]]--
     end
 })
 
