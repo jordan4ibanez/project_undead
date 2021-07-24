@@ -4,6 +4,10 @@ local player = nil
 local old_control_bits = 0
 local control_bits = 0
 
+local hitting = false
+local crouching = false
+local moving = false
+
 minetest.register_entity(":player_model",{
     visual = "mesh",
     mesh = "player.b3d",
@@ -27,6 +31,9 @@ minetest.register_entity(":player_model",{
 
         -- a cache happy way to intercept player controls
 
+        crouching = false
+        moving = false
+        hitting = false
         control_bits = player:get_player_control_bits()
         old_control_bits = control_bits
 
@@ -43,11 +50,13 @@ minetest.register_entity(":player_model",{
         -- dig
         if (control_bits >= 128) then
             control_bits = control_bits - 128
+            hitting = true
         end
 
         -- sneak
         if (control_bits >= 64) then
             control_bits = control_bits - 64
+            crouching = true
         end
 
         -- aux1
@@ -60,28 +69,46 @@ minetest.register_entity(":player_model",{
             control_bits = control_bits - 16
         end
 
+
+
         -- right
         if (control_bits >= 8) then
             control_bits = control_bits - 8
+            moving = true
         end
 
         -- left
         if (control_bits >= 4) then
             control_bits = control_bits - 4
+            moving = true
         end
 
         -- down
         if (control_bits >= 2) then
             control_bits = control_bits - 2
+            moving = true
         end
 
         -- up
         if (control_bits >= 1) then
             control_bits = control_bits - 1
+            moving = true
         end
 
 
         -- do animation
+
+        if (crouching) then
+            print("I am crouching")
+        end
+
+        if (moving) then
+            print("I am moving")
+        end
+
+        if (hitting) then
+            print("I am hitting")
+        end
 
     end
 })
