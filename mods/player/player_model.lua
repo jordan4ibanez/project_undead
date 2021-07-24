@@ -37,7 +37,7 @@ minetest.register_entity(":player_model",{
     visual_size = {x = 1.1, y = 1.1},
     attached_player = nil,
     current_animation = 0,
-    on_step = function(self, dtime)
+    on_step = function(self)
         if (self.attached_player == nil) then
             self.object:remove()
             return
@@ -132,6 +132,10 @@ minetest.register_entity(":player_model",{
             self.object:set_animation({ x = stand_begin, y = stand_end }, 20, 0, true)
             self.current_animation = 0
         end
+
+        -- digest player look pitch
+
+        self.object:set_bone_position("Head",{x = 0, y = 6.25, z = 0}, {x = player:get_look_vertical() * -45, y = 0, z = 0})
 
         -- crouching needs an animation
         --[[
