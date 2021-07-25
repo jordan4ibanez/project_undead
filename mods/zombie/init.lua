@@ -112,6 +112,7 @@ minetest.register_entity(":zombie",{
         end
 
         -- only done every half second to preserve resources
+        -- is overridden and done every server step if chasing
         if (self.internal_timer >= 0.5) then
             self.internal_timer = 0
             search_for_player(self)
