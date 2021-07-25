@@ -43,3 +43,36 @@ register_item({
     inventory_image = "this_is_what_will_show_up_in_inventories.png",
 })
 ```
+
+---
+
+### get_player_stat(player_name, field)
+
+This returns a specific stat from the player. There are 9 stats, and they are:
+```
+health - how healthy you are
+hunger - how hungry you are
+thirst - how thirsty you are
+exhaustion - can limit your speed/stamina
+panic - how panicked you are, can cause you to miss swings and not be able to sleep
+infection - once bit, this will start climbing
+sadness - can cause a bunch of issues
+strength - how much you can carry, how hard you can swing
+fitness - how fast you can run and for how long
+```
+
+This will always return a float value.
+
+---
+
+### get_player_stat_table(player_name)
+
+This is similar to get_player_stat, only it will return the raw table of the stats, which you can modify and work with.
+
+---
+
+### set_player_stat(player_name, field, new_value)
+
+The inverse of get_player_stat. With this, mods can actively modify the player's stats in real time.
+
+---
