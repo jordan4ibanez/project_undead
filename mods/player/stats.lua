@@ -26,6 +26,8 @@ minetest.register_on_joinplayer(function(player)
         strength = 50,
         fitness = 25,
     }
+
+    run_initial_hud_creation(player)
 end)
 
 function get_player_stat(player_name, field)
