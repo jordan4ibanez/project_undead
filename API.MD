@@ -87,5 +87,28 @@ This allows mods to hurt the player. Health is held in a float ranging from -0.0
 
 This is the inverse of the hit_player() function. Health can never go above 100.0. If it is set to over 100, it will automatically adjust back to 100.
 
+---
 
+### raise_X(player, X_amount)
 
+A generic for stats, health is handled with it's own functions due to the way health needs to be handled internally.
+
+raise_X is defined as in the variable X stands for one of the values defined in get_player_stat. An example:
+```
+raise_sadness(player,0.5)
+```
+
+Which will add 0.5 to the stat of sadness for the specified player.
+
+---
+
+### lower_X(player, X_amount)
+
+A generic for stats, health is handled with it's own functions due to the way health needs to be handled internally.
+
+lower_X is defined as in the variable X stands for one of the values defined in get_player_stat. An example:
+```
+lower_sadness(player,0.5)
+```
+
+Which will reduce the stat of sadness by 0.5 for the specified player.
