@@ -13,7 +13,7 @@ function register_tile(def)
             def.left_texture or "invisible.png",
         },
         paramtype2 = "color",
-        pointable = def.pointable or false,
+        pointable = def.pointable or (build_mode or false),
         diggable = false,
         climbable = def.climbable,
         is_ground_content = false,

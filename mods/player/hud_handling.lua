@@ -8,7 +8,9 @@ local hud = {}
 
 function run_initial_hud_creation(player)
     --basically turn everything off
-    player:hud_set_flags({crosshair = false, wielditem = false, hotbar = false, healthbar = false, breathbar = false, minimap = true, minimap_radar = false})
+    if (not build_mode) then
+        player:hud_set_flags({crosshair = false, wielditem = false, hotbar = false, healthbar = false, breathbar = false, minimap = true, minimap_radar = false})
+    end
 
     local name = player:get_player_name()
     hud[name] = {}
