@@ -51,26 +51,19 @@ function set_player_stat(player_name, field, new_value)
     if (stats[player_name] == nil) then
         return
     end
-
     stats[player_name][field] = new_value
-
     update_hud(get_player_by_name(player_name), field, new_value)
 end
 
 function digest_hurt(player, damage)
-
     if (player == nil) then
         return
     end
-
     local name = player:get_player_name()
-
     if (stats[name] == nil) then
         return
     end
-
     local hp = get_player_stat(name, "health")
-
     if (hp > 0 and hp - damage > 0) then
         set_player_stat(name, "health", hp - damage)
     elseif (hp > 0 and hp - damage <= 0) then
@@ -81,27 +74,19 @@ end
 
 
 function digest_heal(player, regen)
-
     if (player == nil) then
         return
     end
-
     local name = player:get_player_name()
-
     if (stats[name] == nil) then
         return
     end
-
     local hp = get_player_stat(name, "health")
-
     if (hp > 0) then
-
         hp = hp + regen
-
         if (hp > 100) then
             hp = 100
         end
-
         set_player_stat(name, "health", hp)
     end
 end
