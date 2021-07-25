@@ -1,7 +1,9 @@
 local get_connected_players = minetest.get_connected_players
 local dir_to_yaw = minetest.dir_to_yaw
+local yaw_to_dir = minetest.yaw_to_dir
 local vector_distance = vector.distance
 local vector_direction = vector.direction
+local vector_multiply = vector.multiply
 local random = math.random
 local pi = math.pi
 local double_pi = pi * 2
@@ -72,6 +74,17 @@ local function cycle_random_behavior(self)
     self.object:set_yaw(random() * double_pi)
 end
 
+
+local function handle_locomotion(self)
+    if (self.behavior == 0) then
+        self.object:set_velocity({ x = 0, y = 0, z = 0})
+    elseif (self.behavior == 1) then
+        self.object:set_velocity(vector_multiply(yaw_to_dir(self.object:get_yaw()), 2))
+    elseif (self.behavior == 2) then
+        self.object:set_velocity(vector_multiply(yaw_to_dir(self.object:get_yaw()), 1.5))
+    end
+end
+
 minetest.register_entity(":zombie",{
     visual = "mesh",
     mesh = "zombie.b3d",
@@ -116,6 +129,7 @@ minetest.register_entity(":zombie",{
             end
         end
 
+        handle_locomotion(self)
         handle_animation(self)
     end,
 
