@@ -1,5 +1,9 @@
 local get_player_by_name = minetest.get_player_by_name
 
+local name
+local hp
+local generic_stat
+
 -- hierarchy = local table of players - player - status value
 local stats = {}
 
@@ -59,11 +63,11 @@ function digest_hurt(player, damage)
     if (player == nil) then
         return
     end
-    local name = player:get_player_name()
+    name = player:get_player_name()
     if (stats[name] == nil) then
         return
     end
-    local hp = get_player_stat(name, "health")
+    hp = get_player_stat(name, "health")
     if (hp > 0 and hp - damage > 0) then
         set_player_stat(name, "health", hp - damage)
     elseif (hp > 0 and hp - damage <= 0) then
@@ -75,11 +79,11 @@ function digest_heal(player, regen)
     if (player == nil) then
         return
     end
-    local name = player:get_player_name()
+    name = player:get_player_name()
     if (stats[name] == nil) then
         return
     end
-    local hp = get_player_stat(name, "health")
+    hp = get_player_stat(name, "health")
     if (hp > 0) then
         hp = hp + regen
         if (hp > 100) then
@@ -94,11 +98,11 @@ function digest_stat_addition(player, stat, value)
     if (player == nil) then
         return
     end
-    local name = player:get_player_name()
+    name = player:get_player_name()
     if (stats[name] == nil) then
         return
     end
-    local generic_stat = get_player_stat(name, stat)
+    generic_stat = get_player_stat(name, stat)
     generic_stat = generic_stat + value
     if (generic_stat > 100) then
         generic_stat = 100
@@ -111,11 +115,11 @@ function digest_stat_subtraction(player, stat, value)
     if (player == nil) then
         return
     end
-    local name = player:get_player_name()
+    name = player:get_player_name()
     if (stats[name] == nil) then
         return
     end
-    local generic_stat = get_player_stat(name, stat)
+    generic_stat = get_player_stat(name, stat)
     generic_stat = generic_stat - value
     if (generic_stat < 0) then
         generic_stat = 0

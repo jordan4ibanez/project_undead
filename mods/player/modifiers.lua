@@ -17,7 +17,6 @@ function lower_hunger(player, hunger_amount)
     digest_stat_subtraction(player, "hunger", hunger_amount)
 end
 
-
 -- globalized reference for thirst (adder and subtractor)
 function raise_thirst(player, thirst_amount)
     digest_stat_addition(player, "thirst", thirst_amount)
