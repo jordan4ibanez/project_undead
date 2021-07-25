@@ -31,12 +31,12 @@ minetest.register_on_joinplayer(function(player)
     run_initial_hud_creation(player)
 end)
 
-function get_player_stat(player_name, field)
+function get_player_stat(player_name, stat)
     if (stats[player_name] == nil) then
         return nil
     end
 
-    return(stats[player_name][field])
+    return(stats[player_name][stat])
 end
 
 function get_player_stat_table(player_name)
@@ -47,14 +47,14 @@ function get_player_stat_table(player_name)
     return(stats[player_name])
 end
 
-function set_player_stat(player_name, field, new_value)
+function set_player_stat(player_name, stat, new_value)
     if (stats[player_name] == nil) then
         return
     end
-    stats[player_name][field] = new_value
-    update_hud(get_player_by_name(player_name), field, new_value)
+    stats[player_name][stat] = new_value
+    update_hud(get_player_by_name(player_name), stat, new_value)
 end
-
+-- health has it's own functions because it will use them in more specific manors in the future
 function digest_hurt(player, damage)
     if (player == nil) then
         return
@@ -71,8 +71,6 @@ function digest_hurt(player, damage)
         print("You are dead")
     end
 end
-
-
 function digest_heal(player, regen)
     if (player == nil) then
         return
@@ -91,6 +89,39 @@ function digest_heal(player, regen)
     end
 end
 
+-- generic adder
+function digest_stat_addition(player, stat, value)
+    if (player == nil) then
+        return
+    end
+    local name = player:get_player_name()
+    if (stats[name] == nil) then
+        return
+    end
+    local generic_stat = get_player_stat(name, stat)
+    generic_stat = generic_stat + value
+    if (generic_stat > 100) then
+        generic_stat = 100
+    end
+    set_player_stat(name, stat, value)
+end
+
+-- generic subtractor
+function digest_stat_subtraction(player, stat, value)
+    if (player == nil) then
+        return
+    end
+    local name = player:get_player_name()
+    if (stats[name] == nil) then
+        return
+    end
+    local generic_stat = get_player_stat(name, stat)
+    generic_stat = generic_stat - value
+    if (generic_stat < 0) then
+        generic_stat = 0
+    end
+    set_player_stat(name, stat, value)
+end
 
 minetest.register_on_leaveplayer(function(player)
     print("needs to save the player's data!")
