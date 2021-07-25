@@ -27,3 +27,7 @@ minetest.register_on_joinplayer(function(player)
         fitness = 25,
     }
 end)
+
+minetest.register_on_leaveplayer(function(player)
+    print("needs to save the player's data!")
+end)
