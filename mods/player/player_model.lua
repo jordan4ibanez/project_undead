@@ -3,9 +3,11 @@ local get_player_by_name = minetest.get_player_by_name
 -- animation localities
 local player = nil
 local control_bits = 0
+
 local hitting = false
 local crouching = false
 local moving = false
+local aiming = false
 
 -- avoids table look ups
 
@@ -63,6 +65,7 @@ minetest.register_entity(":player_model",{
         crouching = false
         moving = false
         hitting = false
+        aiming = false
 
         control_bits = player:get_player_control_bits()
 
@@ -74,6 +77,7 @@ minetest.register_entity(":player_model",{
         -- place
         if (control_bits >= 256) then
             control_bits = control_bits - 256
+            aiming = true
         end
 
         -- dig
@@ -130,15 +134,19 @@ minetest.register_entity(":player_model",{
         if (moving and hitting and self.current_animation ~= 3) then
             self.object:set_animation({ x = walk_hit_begin, y = walk_hit_end }, 20, 0, true)
             self.current_animation = 3
+
         elseif (moving and not hitting and self.current_animation ~= 2) then
             self.object:set_animation({ x = walk_begin, y = walk_end }, 20, 0, true)
             self.current_animation = 2
+
         elseif (hitting and not moving and self.current_animation ~= 1) then
             self.object:set_animation({ x = hit_begin, y = hit_end }, 20, 0, true)
             self.current_animation = 1
+
         elseif (not hitting and not moving and self.current_animation ~= 0) then
             self.object:set_animation({ x = stand_begin, y = stand_end }, 20, 0, true)
             self.current_animation = 0
+
         end
 
         -- digest player look pitch
