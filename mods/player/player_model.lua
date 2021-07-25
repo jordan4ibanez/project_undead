@@ -27,6 +27,14 @@ local hit_end = 199
 local walk_hit_begin = 200
 local walk_hit_end = 220
 
+local aim_begin = 221
+local aim_end = 221
+
+local aim_walk_begin = 222
+local aim_walk_end = 234
+
+
+
 
 
 minetest.register_entity(":player_model",{

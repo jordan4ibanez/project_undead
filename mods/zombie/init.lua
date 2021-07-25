@@ -18,7 +18,7 @@ minetest.register_entity(":zombie",{
     visual_size = {x = 1.1, y = 1.1},
     current_animation = 0,
     physical = true,
-    collide_with_objects = true,
+    collide_with_objects = false,
     collisionbox = {-0.5, 0.0, -0.5, 0.5, 1.5, 0.5},
 
     on_step = function(self)
