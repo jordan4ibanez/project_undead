@@ -1,4 +1,3 @@
-
 local stat_intake
 
 --hud hierarchy = hud - player - hud element
@@ -200,6 +199,10 @@ function run_initial_hud_creation(player)
     })
 end
 
-function update_stat(player_name, stat_string, new_value)
-    hud[player_name][stat_string] = new_value
+function update_hud(player, stat_string, new_value)
+    local player_name = player:get_player_name()
+    if (hud[player_name] == nil) then
+        return
+    end
+    player:hud_change(hud[player_name][stat_string], "scale", { x = -7, y = (new_value / 100) * -10})
 end
