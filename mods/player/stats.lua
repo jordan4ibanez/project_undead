@@ -28,6 +28,18 @@ minetest.register_on_joinplayer(function(player)
     }
 end)
 
+function get_player_stat(player_name, field)
+    return(stats[player_name][field])
+end
+
+function get_player_stat_table(player_name)
+    return(stats[player_name])
+end
+
+function set_player_stat(player_name, field, new_value)
+    stats[player_name][field] = new_value
+end
+
 minetest.register_on_leaveplayer(function(player)
     print("needs to save the player's data!")
 end)
