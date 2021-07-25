@@ -199,3 +199,7 @@ function run_initial_hud_creation(player)
         alignment = { x = 1, y = -1 },
     })
 end
+
+function update_stat(player_name, stat_string, new_value)
+    hud[player_name][stat_string] = new_value
+end
