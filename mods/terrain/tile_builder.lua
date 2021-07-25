@@ -19,7 +19,7 @@ function register_tile(def)
         is_ground_content = false,
         buildable_to = false,
         floodable = false,
-        liquidtype = none,
+        liquidtype = nil,
         damage_per_second = def.dps or nil,
         waving = def.waving,
     })
