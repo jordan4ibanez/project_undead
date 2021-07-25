@@ -57,10 +57,13 @@ end
 local function handle_animation(self)
     if (self.current_animation ~= 0 and self.behavior == 0) then
         self.object:set_animation({ x = stand_start, y = stand_end }, 20, 0, true)
+        self.current_animation = 0
     elseif (self.current_animation ~= 1 and self.behavior == 1) then
         self.object:set_animation({ x = walk_start, y = walk_end }, 20, 0, true)
+        self.current_animation = 1
     elseif (self.current_animation ~= 2 and self.behavior == 2) then
         self.object:set_animation({ x = wander_start, y = wander_end }, 20, 0, true)
+        self.current_animation = 2
     end
 end
 
