@@ -18,8 +18,8 @@ fitness - how fast you can run and for how long
 minetest.register_on_joinplayer(function(player)
     stats[player:get_player_name()] = {
         health = 100,
-        hunger = 0,
-        thirst = 0,
+        hunger = 100, --hunger and thirst work on inverse properties
+        thirst = 100, --the lower these drop, the higher your needs
         exhaustion = 0,
         panic = 0,
         infection = 0,
@@ -57,29 +57,56 @@ function set_player_stat(player_name, field, new_value)
     update_hud(get_player_by_name(player_name), field, new_value)
 end
 
-minetest.register_on_leaveplayer(function(player)
-    print("needs to save the player's data!")
-end)
+function digest_hurt(player, damage)
 
-
-minetest.register_globalstep(function(dtime)
-    local x = get_player_stat("singleplayer", "health")
-
-    print(x)
-
-    if (x == nil) then
+    if (player == nil) then
         return
     end
 
-    x = x + 1
+    local name = player:get_player_name()
 
-    if (x < 100) then
-        set_player_stat("singleplayer", "health", x)
-
-    elseif (x >= 100) then
-        x = 0
-        set_player_stat("singleplayer", "health", x)
+    if (stats[name] == nil) then
+        return
     end
 
+    local hp = get_player_stat(name, "health")
 
+    if (hp > 0 and hp - damage > 0) then
+        set_player_stat(name, "health", hp - damage)
+    elseif (hp > 0 and hp - damage <= 0) then
+        --do death
+        print("You are dead")
+    end
+end
+
+
+function digest_heal(player, regen)
+
+    if (player == nil) then
+        return
+    end
+
+    local name = player:get_player_name()
+
+    if (stats[name] == nil) then
+        return
+    end
+
+    local hp = get_player_stat(name, "health")
+
+    if (hp > 0) then
+
+        hp = hp + regen
+
+        if (hp > 100) then
+            hp = 100
+        end
+
+        set_player_stat(name, "health", hp)
+    end
+end
+
+
+minetest.register_on_leaveplayer(function(player)
+    print("needs to save the player's data!")
 end)

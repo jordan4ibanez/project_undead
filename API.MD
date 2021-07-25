@@ -51,8 +51,8 @@ register_item({
 This returns a specific stat from the player. There are 9 stats, and they are:
 ```
 health - how healthy you are
-hunger - how hungry you are
-thirst - how thirsty you are
+hunger - how hungry you are - higher is more satisfied
+thirst - how thirsty you are - higher is more satisfied
 exhaustion - can limit your speed/stamina
 panic - how panicked you are, can cause you to miss swings and not be able to sleep
 infection - once bit, this will start climbing
@@ -76,3 +76,16 @@ This is similar to get_player_stat, only it will return the raw table of the sta
 The inverse of get_player_stat. With this, mods can actively modify the player's stats in real time.
 
 ---
+
+### hurt_player(player, damage)
+
+This allows mods to hurt the player. Health is held in a float ranging from -0.0 to 100.0. When then player's health reaches 0 or below, it will kill them.
+
+---
+
+### heal_player(player, damage)
+
+This is the inverse of the hit_player() function. Health can never go above 100.0. If it is set to over 100, it will automatically adjust back to 100.
+
+
+
