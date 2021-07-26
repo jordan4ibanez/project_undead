@@ -48,3 +48,8 @@ register_tile({
     name = "sidewalk",
     top_texture = "sidewalk.png"
 })
+
+register_tile({
+    name = "concrete",
+    all_texture = "concrete.png"
+})
