@@ -344,5 +344,11 @@ register_tile({
             29
         },
     }
+})
 
+
+register_tile({
+    name = "generic_store_isle_end_stocked",
+
+    fence = true,
 })
