@@ -11,12 +11,17 @@ This also frees up the need to constantly define "mod:thething", where as now yo
 ```
 register_tile(
     name = "my_amazing_tile",
+    
     top_texture = "blah.png",
     bottom_texture = "blah.png",
     front_texture = "blah.png",
     back_texture = "blah.png",
     right_texture = "blah.png",
     left_texture = "blah.png",
+    
+    --alternatively you can do all_texture, which will automatically assign this texture to all faces
+    --this will override any X_texture defined above, so be careful.
+    all_texture = "blah.png" 
     
     pointable = false,
     climbable = true,
