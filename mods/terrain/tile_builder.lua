@@ -59,7 +59,7 @@ function register_tile(def)
         -- automatically format pixel integer to floating point precision
         for parent_id,parent_table in pairs(def.pixel_box) do
             for child_id,child_value in pairs(parent_table) do
-                def.pixel_box[parent_id][child_id] = child_value / def.pixel_box_texture_size
+                def.pixel_box[parent_id][child_id] = (child_value / def.pixel_box_texture_size) - 0.5
             end
         end
 
@@ -67,6 +67,8 @@ function register_tile(def)
             type = "fixed",
             fixed = def.pixel_box
         }
+
+        drawtype = "nodebox"
     end
 
 
