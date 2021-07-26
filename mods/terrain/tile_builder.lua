@@ -41,6 +41,12 @@ function register_tile(def)
     end
 
 
+    if (def.glass) then
+        sunlight_propagates = true
+        drawtype = "glasslike"
+    end
+
+
     register_node(":" .. (def.name or "you've failed to name your tile"), {
         description = def.description,
         tiles = tiles,
