@@ -133,10 +133,57 @@ lower_sadness(player,0.5)
 Which will reduce the stat of sadness by 0.5 for the specified player.
 
 ---
+
 ### pixel_box
 
 A pixel box is the easier to define nodebox, which is pixel perfect for the texture you define.
 The pixel box uses face direction automatically, so you can easily edit the map and put in more things in editor mode!
 
+You must put in a pixel_box_texture_size and work between the boundaries. This can also be used to define sub-pixel accuracy.
 
+Translucency, is defined with a simple boolean of "translucent".
+
+The definition is very simple:
+
+```
+register_tile({
+    name = "my_cool_tile",
+    all_texture = "my_texture.png",
+    
+    pixel_box_texture_size = 32,
+    pixel_box = {
+        {
+            15,
+            0,
+            0,
+
+            17,
+            32,
+            32
+        },
+        {
+            0,0,0,32,32,32
+        },
+        -- so on and so forth
+    }
+    
+    translucent = true,
+})
+```
+
+---
+
+### glass
+
+Creating a glass is very easy. All you must do is add "glass = true" to the definition and it will behave as a solid tile of glass with translucency.
+
+```
+register_tile({
+    name = "glass",
+    all_texture = "glass.png",
+    glass = true,
+})
+```
+
+---
 
