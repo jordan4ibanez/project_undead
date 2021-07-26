@@ -40,10 +40,33 @@ function register_tile(def)
         }
     end
 
-
+    -- an easier way to define glass
     if (def.glass) then
         sunlight_propagates = true
         drawtype = "glasslike"
+    end
+
+    -- a much easier way to get pixel perfect node boxes
+    if (def.pixel_box) then
+        sunlight_propagates = def.translucent or true
+
+        -- throws an error for undefined texture size
+        if (not def.pixel_box_texture_size) then
+            error("You must define the pixel_box_texture_size in tile: " .. def.name)
+        end
+
+
+        -- automatically format pixel integer to floating point precision
+        for parent_id,parent_table in pairs(def.pixel_box) do
+            for child_id,child_value in pairs(parent_table) do
+                def.pixel_box[parent_id][child_id] = child_value / def.pixel_box_texture_size
+            end
+        end
+
+        node_box = {
+            type = "fixed",
+            fixed = def.pixel_box
+        }
     end
 
 

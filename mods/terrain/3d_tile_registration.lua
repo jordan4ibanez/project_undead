@@ -45,3 +45,20 @@ register_tile({
     all_texture = "glass.png",
     glass = true,
 })
+
+
+register_tile({
+    name = "store_isle_shelf_center_empty",
+    top_texture = ".png",
+    right_texture = ".png",
+    left_texture = ".png",
+    front_texture = ".png",
+    back_texture = ".png",
+
+    pixel_box_texture_size = 32,
+    pixel_box = {
+        {0,3,5,31,10,15},
+        {0,0,0,32,32,32},
+    }
+
+})

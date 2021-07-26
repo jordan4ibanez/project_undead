@@ -19,17 +19,27 @@ register_tile(
     right_texture = "blah.png",
     left_texture = "blah.png",
     
-    --alternatively you can do all_texture, which will automatically assign this texture to all faces
-    --this will override any X_texture defined above, so be careful.
-    all_texture = "blah.png" 
+    -- alternatively you can do all_texture, which will automatically assign this texture to all faces
+    -- this will override any X_texture defined above, so be careful.
+    all_texture = "blah.png",
     
-    --this will automatically assign the tile to be a solid pole that doesn't connect to anything.
-    --sunlight will also pass through it infinitely.
+    -- an easier to define node_box, takes into account texture size. See: pixel_box below
+    pixel_box = {},
+    pixel_box_texture_size = 32,
+    translucent = true,
+    
+    -- this will automatically assign the tile to be a solid pole that doesn't connect to anything.
+    -- sunlight will also pass through it infinitely.
     pole = true,
+    
+    -- this is a very easy way to create glass
+    glass = true,
     
     pointable = false,
     climbable = true,
-    dps = 0, --damage per second
+    
+    --damage per second
+    dps = 0,
     waving = true,
 )
 ```
@@ -121,3 +131,12 @@ lower_sadness(player,0.5)
 ```
 
 Which will reduce the stat of sadness by 0.5 for the specified player.
+
+---
+### pixel_box
+
+A pixel box is the easier to define nodebox, which is pixel perfect for the texture you define.
+The pixel box uses face direction automatically, so you can easily edit the map and put in more things in editor mode!
+
+
+
