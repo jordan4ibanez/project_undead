@@ -48,17 +48,101 @@ register_tile({
 
 
 register_tile({
-    name = "store_isle_shelf_center_empty",
-    top_texture = ".png",
-    right_texture = ".png",
-    left_texture = ".png",
-    front_texture = ".png",
-    back_texture = ".png",
+    name = "generic_store_isle_shelf_center_empty",
+    top_texture = "generic_store_isle_shelf_empty_top.png",
+
+    right_texture = "generic_store_isle_shelf_empty_side.png",
+    left_texture = "generic_store_isle_shelf_empty_side.png",
+
+    front_texture = "generic_store_isle_shelf_empty_front.png",
+    back_texture = "generic_store_isle_shelf_empty_front.png",
 
     pixel_box_texture_size = 32,
     pixel_box = {
-        {0,3,5,31,10,15},
-        {0,0,0,32,32,32},
+        -- center column
+        {
+            15,
+            0,
+            0,
+
+            17,
+            32,
+            32
+        },
+
+        -- bottom shelf
+        {
+            0,
+            30,
+            0,
+
+            32,
+            32,
+            32
+        },
+
+
+        -- top shelf
+        {
+            0,
+            14,
+            0,
+
+            32,
+            16,
+            32
+        },
+    }
+
+})
+
+
+register_tile({
+    name = "generic_store_isle_end_shelf_center_empty",
+
+    top_texture = "1_generic_store_isle_end_shelf_empty_top.png",
+
+    right_texture = "1_generic_store_isle_end_shelf_empty_side.png^[transformFX",
+    left_texture = "1_generic_store_isle_end_shelf_empty_side.png",
+
+    front_texture = "1_generic_store_isle_end_shelf_empty_front.png",
+    back_texture = "1_generic_store_isle_end_shelf_empty_front.png",
+
+    pixel_box_texture_size = 32,
+    pixel_box = {
+        -- center column
+        {
+            0,
+            0,
+            0,
+
+            2,
+            32,
+            32
+        },
+
+        -- bottom shelf
+        {
+            0,
+            30,
+            0,
+
+            16,
+            32,
+            32
+        },
+
+
+        -- top shelf
+        {
+            0,
+            14,
+            0,
+
+            16,
+            16,
+            32
+        },
     }
 
 })
