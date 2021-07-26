@@ -7,6 +7,7 @@ function register_tile(def)
     local tiles
     local node_box
     local sunlight_propagates
+    local use_texture_alpha
 
     -- digest rotation parameter
     if (def.rotation) then
@@ -69,6 +70,8 @@ function register_tile(def)
         }
 
         drawtype = "nodebox"
+
+        use_texture_alpha = "clip"
     end
 
 
@@ -89,5 +92,6 @@ function register_tile(def)
         drawtype = drawtype,
         node_box = node_box,
         sunlight_propagates = sunlight_propagates,
+        use_texture_alpha = use_texture_alpha,
     })
 end
