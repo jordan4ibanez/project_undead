@@ -3,12 +3,17 @@ local register_node = minetest.register_node
 --this is a wrapper for the build in Minetest library, can be used to optimize nodes, now called tiles since game is mostly 2D in nature
 function register_tile(def)
     local param2
+    local drawtype
+    local tiles
+    local node_box
+    local sunlight_propagates
+
+    -- digest rotation parameter
     if (def.rotation) then
         param2 = "facedir"
     end
 
-    local tiles
-
+    -- allow for single texture definition
     if (def.all_texture) then
         tiles = {def.all_texture}
     else
@@ -21,6 +26,20 @@ function register_tile(def)
             def.left_texture or "invisible.png",
         }
     end
+
+
+    -- easy way to define poles
+    if (def.pole) then
+        sunlight_propagates = true
+        drawtype = "nodebox"
+        node_box = {
+            type = "fixed",
+            fixed = {
+                { -0.15, -0.5, -0.15, 0.15, 0.5, 0.15 }
+            }
+        }
+    end
+
 
     register_node(":" .. (def.name or "you've failed to name your tile"), {
         description = def.description,
@@ -35,6 +54,9 @@ function register_tile(def)
         liquidtype = nil,
         damage_per_second = def.dps or nil,
         waving = def.waving,
-        groups = { editor = 1 }
+        groups = { editor = 1 },
+        drawtype = drawtype,
+        node_box = node_box,
+        sunlight_propagates = sunlight_propagates,
     })
 end

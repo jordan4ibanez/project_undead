@@ -23,6 +23,10 @@ register_tile(
     --this will override any X_texture defined above, so be careful.
     all_texture = "blah.png" 
     
+    --this will automatically assign the tile to be a solid pole that doesn't connect to anything.
+    --sunlight will also pass through it infinitely.
+    pole = true,
+    
     pointable = false,
     climbable = true,
     dps = 0, --damage per second

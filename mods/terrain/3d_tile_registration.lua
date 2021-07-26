@@ -17,3 +17,10 @@ register_tile({
     back_texture = "gas_n_go_sign_2.png",
     rotation = true,
 })
+
+
+register_tile({
+    name = "pole_blue",
+    all_texture = "pole_blue.png",
+    pole = true,
+})
