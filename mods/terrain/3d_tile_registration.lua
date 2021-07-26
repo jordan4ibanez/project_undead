@@ -48,14 +48,15 @@ register_tile({
 
 
 register_tile({
-    name = "generic_store_isle_shelf_center_empty",
-    top_texture = "generic_store_isle_shelf_empty_top.png",
+    name = "generic_store_isle_empty",
+    top_texture = "generic_store_isle_empty_top.png",
+    bottom_texture = "generic_store_isle_empty_top.png",
 
-    right_texture = "generic_store_isle_shelf_empty_side.png",
-    left_texture = "generic_store_isle_shelf_empty_side.png",
+    right_texture = "generic_store_isle_empty_side.png",
+    left_texture = "generic_store_isle_empty_side.png",
 
-    front_texture = "generic_store_isle_shelf_empty_front.png",
-    back_texture = "generic_store_isle_shelf_empty_front.png",
+    front_texture = "generic_store_isle_empty_front.png",
+    back_texture = "generic_store_isle_empty_front.png",
 
     pixel_box_texture_size = 32,
     pixel_box = {
@@ -98,15 +99,16 @@ register_tile({
 
 
 register_tile({
-    name = "generic_store_isle_end_shelf_center_empty",
+    name = "generic_store_isle_end_empty",
 
-    top_texture = "1_generic_store_isle_end_shelf_empty_top.png",
+    top_texture = "generic_store_isle_end_empty_top.png",
+    bottom_texture = "generic_store_isle_end_empty_top.png",
 
-    right_texture = "1_generic_store_isle_end_shelf_empty_side.png^[transformFX",
-    left_texture = "1_generic_store_isle_end_shelf_empty_side.png",
+    right_texture = "generic_store_isle_end_empty_side.png^[transformFX",
+    left_texture = "generic_store_isle_end_empty_side.png",
 
-    front_texture = "1_generic_store_isle_end_shelf_empty_front.png",
-    back_texture = "1_generic_store_isle_end_shelf_empty_front.png",
+    front_texture = "generic_store_isle_end_empty_front.png",
+    back_texture = "generic_store_isle_end_empty_front.png",
 
     pixel_box_texture_size = 32,
     pixel_box = {
@@ -142,6 +144,204 @@ register_tile({
             16,
             16,
             32
+        },
+    }
+
+})
+
+register_tile({
+    name = "generic_store_isle_stocked",
+
+    top_texture = "generic_store_isle_stocked_top.png",
+    bottom_texture = "generic_store_isle_empty_top.png",
+
+    right_texture = "generic_store_isle_stocked_side.png",
+    left_texture = "generic_store_isle_stocked_side.png",
+
+    front_texture = "generic_store_isle_stocked_front.png",
+    back_texture = "generic_store_isle_stocked_front.png",
+
+    pixel_box_texture_size = 32,
+    pixel_box = {
+
+        -- center column
+        {
+            15,
+            0,
+            0,
+
+            17,
+            32,
+            32
+        },
+
+        -- bottom shelf
+        {
+            0,
+            30,
+            0,
+
+            32,
+            32,
+            32
+        },
+
+        -- top shelf
+        {
+            0,
+            14,
+            0,
+
+            32,
+            16,
+            32
+        },
+
+        -- item - top left
+
+        {
+            10,
+            1,
+            3,
+
+            22,
+            14,
+            12
+        },
+
+        -- item - bottom left
+
+        {
+            10,
+            17,
+            3,
+
+            22,
+            30,
+            12
+        },
+
+        -- item - top right
+
+        {
+            10,
+            1,
+            20,
+
+            22,
+            14,
+            29
+        },
+
+        -- item - bottom right
+
+        {
+            10,
+            17,
+            20,
+
+            22,
+            30,
+            29
+        },
+    }
+})
+
+
+register_tile({
+    name = "generic_store_isle_end_stocked",
+
+    top_texture = "generic_store_isle_end_stocked_top.png",
+    bottom_texture = "generic_store_isle_end_stocked_top.png",
+
+    right_texture = "generic_store_isle_end_stocked_side.png^[transformFX",
+    left_texture = "generic_store_isle_end_stocked_side.png",
+
+    front_texture = "generic_store_isle_end_empty_front.png",
+    back_texture = "generic_store_isle_end_stocked_front.png",
+
+    pixel_box_texture_size = 32,
+    pixel_box = {
+        -- center column
+        {
+            0,
+            0,
+            0,
+
+            2,
+            32,
+            32
+        },
+
+        -- bottom shelf
+        {
+            0,
+            30,
+            0,
+
+            16,
+            32,
+            32
+        },
+
+
+        -- top shelf
+        {
+            0,
+            14,
+            0,
+
+            16,
+            16,
+            32
+        },
+
+        -- item - top left
+
+        {
+            2,
+            1,
+            3,
+
+            7,
+            14,
+            12
+        },
+
+        -- item - bottom left
+
+        {
+            2,
+            17,
+            3,
+
+            7,
+            30,
+            12
+        },
+
+        -- item - top right
+
+        {
+            2,
+            1,
+            20,
+
+            7,
+            14,
+            29
+        },
+
+        -- item - bottom right
+
+        {
+            2,
+            17,
+            20,
+
+            7,
+            30,
+            29
         },
     }
 
