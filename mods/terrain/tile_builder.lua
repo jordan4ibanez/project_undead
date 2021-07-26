@@ -72,6 +72,8 @@ function register_tile(def)
         drawtype = "nodebox"
 
         use_texture_alpha = "clip"
+
+        param2 = "facedir"
     end
 
 
