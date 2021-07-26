@@ -3,7 +3,7 @@ if (build_mode) then
         range = 100,
         tool_capabilities = {
             groupcaps = {
-                editor = {times = { [1] = 5}, uses = 1000000, maxlevel = 256},
+                editor = {times = { [1] = 50}, uses = 1000000, maxlevel = 256},
             }
         }
     })
