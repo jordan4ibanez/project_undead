@@ -49,7 +49,9 @@ register_tile({
     top_texture = "sidewalk.png"
 })
 
+
 register_tile({
-    name = "concrete",
-    all_texture = "concrete.png"
+    name = "concrete_parking",
+    top_texture = "concrete.png^road_lines_solid_side.png",
+    rotation = true,
 })
