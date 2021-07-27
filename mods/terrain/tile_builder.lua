@@ -158,6 +158,10 @@ function register_tile(def)
         groups.editor = 1
     end
 
+    if (def.climb_over) then
+        groups.climb_over = 1
+    end
+
     -- finally, disable fall damage
     groups.fall_damage_add_percent = -100
 
@@ -168,7 +172,6 @@ function register_tile(def)
         paramtype2 = param2,
         pointable = def.pointable or (build_mode or false),
         diggable = build_mode or false,
-        climbable = def.climbable,
         is_ground_content = false,
         buildable_to = false,
         floodable = false,
