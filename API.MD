@@ -29,7 +29,10 @@ register_tile(
     translucent = true,
     
     -- directly input a nodebox and it will be digested as so
-    pixel_box_specific = {}
+    pixel_box_specific = {},
+    
+    -- this allows players to climb over the tile you're creating
+    climb_over = true,
     
     -- this will automatically assign the tile to be a solid pole that doesn't connect to anything.
     -- sunlight will also pass through it infinitely.
