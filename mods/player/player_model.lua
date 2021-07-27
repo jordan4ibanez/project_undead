@@ -41,6 +41,22 @@ local climb_over_end = 255
     0 - stand
 ]]--
 
+local function player_is_aiming(player)
+    local control_bits = player:get_player_control_bits()
+
+    -- zoom
+    if (control_bits >= 512) then
+        control_bits = control_bits - 512
+    end
+
+    -- place
+    if (control_bits >= 256) then
+        control_bits = control_bits - 256
+        return true
+    end
+    return false
+end
+
 
 minetest.register_entity(":player_holding_item", {
     initial_properties = {
@@ -56,6 +72,8 @@ minetest.register_entity(":player_holding_item", {
         visual_size  = {x = 0.2, y = 0.2},
     },
     itemstring = "",
+    gun = false,
+    aim_adjusted = false,
     set_item = function(self, item)
         if (self.itemstring == item) then
             return
@@ -76,30 +94,54 @@ minetest.register_entity(":player_holding_item", {
             wield_item = self.itemstring,
             visual_size  = {x = scale_x, y = scale_y, z = scale_z},
         })
+
+        self.gun = get_item_group(item, "gun") > 0
     end,
     attached_player = nil,
     timer = 0,
     on_step = function(self,dtime)
         self.timer = self.timer + dtime
 
+        if (self.attached_player == nil) then
+            self.object:remove()
+            return
+        end
+
+        local player = get_player_by_name(self.attached_player)
+
+        if (player == nil) then
+            self.object:remove()
+            return
+        end
+
         -- wielded item entity does not need to update often
         if (self.timer >= 0.25) then
-            if (self.attached_player == nil) then
-                self.object:remove()
-                return
-            end
-
-            local player = get_player_by_name(self.attached_player)
-
-            if (player == nil) then
-                self.object:remove()
-                return
-            end
 
             local item = player:get_wielded_item():get_name()
 
             self.set_item(self,item)
         end
+
+        --wield_item:set_attach(model,"Arm_Right", {x=0,y=6,z=1}, {x=90,y=0,z=-90}, true)
+
+        -- allow player to aim down gun sights
+        if (self.gun) then
+            local player_aiming = player_is_aiming(get_player_by_name(self.attached_player))
+            if (player_aiming and not self.aim_adjusted) then
+                local attached,_ = self.object:get_attach()
+                self.object:set_attach(attached,"Arm_Right", {x=0.5,y=6,z=1}, {x=85,y=0,z=-70}, true)
+                self.aim_adjusted = true
+            elseif (not player_aiming and self.aim_adjusted) then
+                local attached,_ = self.object:get_attach()
+                self.object:set_attach(attached,"Arm_Right", {x=0,y=6,z=1}, {x=90,y=0,z=-90}, true)
+                self.aim_adjusted = false
+            end
+        elseif (self.aim_adjusted) then
+            local attached,_ = self.object:get_attach()
+            self.object:set_attach(attached,"Arm_Right", {x=0,y=6,z=1}, {x=90,y=0,z=-90}, true)
+            self.aim_adjusted = false
+        end
+
     end,
 })
 
@@ -141,7 +183,7 @@ minetest.register_entity(":player_model",{
         local hitting = false
         local aiming = false
 
-        local holding_gun = false
+        local holding_gun = get_item_group(player:get_wielded_item():get_name(), "gun") > 0
 
         local control_bits = player:get_player_control_bits()
 
