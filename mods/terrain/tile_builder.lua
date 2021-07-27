@@ -2,12 +2,14 @@ local register_node = minetest.register_node
 
 --this is a wrapper for the build in Minetest library, can be used to optimize nodes, now called tiles since game is mostly 2D in nature
 function register_tile(def)
+    local paramtype
     local param2
     local drawtype
     local tiles
     local node_box
     local sunlight_propagates
     local use_texture_alpha
+    local connects_to
 
     -- digest rotation parameter
     if (def.rotation) then
@@ -32,6 +34,7 @@ function register_tile(def)
     -- easy way to define poles
     if (def.pole) then
         sunlight_propagates = true
+        paramtype = "light"
         drawtype = "nodebox"
         node_box = {
             type = "fixed",
@@ -45,11 +48,11 @@ function register_tile(def)
     if (def.glass) then
         sunlight_propagates = true
         drawtype = "glasslike"
+        paramtype = "light"
     end
 
     -- a much easier way to get pixel perfect node boxes
     if (def.pixel_box) then
-        sunlight_propagates = def.translucent or true
 
         -- throws an error for undefined texture size
         if (not def.pixel_box_texture_size) then
@@ -74,12 +77,81 @@ function register_tile(def)
         use_texture_alpha = "clip"
 
         param2 = "facedir"
+
+        sunlight_propagates = def.translucent or true
+
+        if (sunlight_propagates) then
+            paramtype = "light"
+        end
     end
 
+    if (def.pixel_box_specific) then
+        node_box = def.pixel_box_specific
+
+        drawtype = "nodebox"
+
+        use_texture_alpha = "clip"
+
+        sunlight_propagates = def.translucent or true
+
+        if (sunlight_propagates) then
+            paramtype = "light"
+        end
+
+        connects_to = def.connects_to
+    end
+
+    -- creates fences automatically
+    if (def.fence) then
+
+        local fixed
+
+        if (build_mode) then
+            fixed = {
+                { -0.15, -0.5, -0.15, 0.15, 0.5, 0.15 }
+            }
+        end
+
+        node_box = {
+            type = "connected",
+            fixed = fixed,
+            connect_front = {
+                { 0, -0.5, -0.5, 0, 0.5, 0 }
+            },
+
+            connect_back = {
+                { 0, -0.5, 0, 0, 0.5, 0.5 }
+            },
+
+            connect_left = {
+                { -0.5, -0.5, 0, 0, 0.5, 0 }
+            },
+
+            connect_right = {
+                { 0, -0.5, 0, 0.5, 0.5, 0 }
+            }
+
+        }
+
+        drawtype = "nodebox"
+
+        use_texture_alpha = "clip"
+
+        connects_to = def.fence_connections
+
+        sunlight_propagates = def.translucent or true
+
+        paramtype = "light"
+
+        if (sunlight_propagates) then
+            paramtype = "light"
+        end
+    end
 
     register_node(":" .. (def.name or "you've failed to name your tile"), {
         description = def.description,
         tiles = tiles,
+        paramtype = paramtype,
         paramtype2 = param2,
         pointable = def.pointable or (build_mode or false),
         diggable = build_mode or false,
@@ -95,5 +167,6 @@ function register_tile(def)
         node_box = node_box,
         sunlight_propagates = sunlight_propagates,
         use_texture_alpha = use_texture_alpha,
+        connects_to = connects_to,
     })
 end

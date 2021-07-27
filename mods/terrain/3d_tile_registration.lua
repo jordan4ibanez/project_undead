@@ -348,7 +348,164 @@ register_tile({
 
 
 register_tile({
-    name = "generic_store_isle_end_stocked",
+    name = "chainlink_fence",
+
+    left_texture = "chainlink_fence.png",
+    right_texture = "chainlink_fence.png",
+    front_texture = "chainlink_fence.png",
+    back_texture = "chainlink_fence.png",
 
     fence = true,
+
+    fence_connections = {"chainlink_fence", "chainlink_fence_pole"}
+})
+
+register_tile({
+    name = "chainlink_fence_pole",
+    all_texture = "chainlink_fence_pole.png",
+    pole = true,
+})
+
+register_tile({
+    name = "guardrail",
+
+    all_texture = "guardrail.png",
+
+    pixel_box_specific = {
+        type = "connected",
+        fixed = { { -0.1, -0.5, -0.1, 0.1, 0.5, 0.1 }, },
+        connect_front = {
+            { 0, -0.1875, -0.5, 0, 0.4375, 0 },
+            { -0.0625, 0.1875, -0.5, 0.0625, 0.3125, 0 },
+            { -0.0625, -0.0625, -0.5, 0.0625, 0.0625, 0 },
+        }, -- z-
+        connect_back = {
+            { 0, -0.1875, 0.5, 0, 0.4375, 0 },
+            { -0.0625, 0.1875, 0.5, 0.0625, 0.3125, 0 },
+            { -0.0625, -0.0625, 0.5, 0.0625, 0.0625, 0 },
+        }, -- z+
+        connect_left = {
+            { -0.5, -0.1875, 0, 0, 0.4375, 0 },
+            { -0.5, 0.1875, -0.0625, 0, 0.3125, 0.0625 },
+            { -0.5, -0.0625, -0.0625, 0, 0.0625, 0.0625 },
+        }, -- x-
+        connect_right = {
+            { 0.5, -0.1875, 0, 0, 0.4375, 0 },
+            { 0.5, 0.1875, -0.0625, 0, 0.3125, 0.0625 },
+            { 0.5, -0.0625, -0.0625, 0, 0.0625, 0.0625 },
+        }, -- x+
+    },
+
+    connects_to = {"guardrail"}
+})
+
+register_tile({
+    name = "jersey_barrier",
+    all_texture = "concrete.png",
+    pixel_box_specific = {
+        type = "connected",
+        fixed = { { -0.35, -0.5, -0.35, 0.35, -0.4, 0.35 }, { -0.15, -0.5, -0.15, 0.15, 0.5, 0.15 } },
+        connect_front = { { -0.35, -0.5, -0.5, 0.35, -0.4, 0.35 }, { -0.15, -0.5, -0.5, 0.15, 0.5, 0.15 } }, -- z-
+        connect_back = { { -0.35, -0.5, -0.35, 0.35, -0.4, 0.5 }, { -0.15, -0.5, -0.15, 0.15, 0.5, 0.5 } }, -- z+
+        connect_left = { { -0.5, -0.5, -0.35, 0.35, -0.4, 0.35 }, { -0.5, -0.5, -0.15, 0.15, 0.5, 0.15 } }, -- x-
+        connect_right = { { -0.35, -0.5, -0.35, 0.5, -0.4, 0.35 }, { -0.15, -0.5, -0.15, 0.5, 0.5, 0.15 } }, -- x+
+    },
+    connects_to = {"jersey_barrier"}
+})
+
+register_tile({
+    name = "gas_pump_bottom",
+
+    top_texture = "gas_pump_top_side.png",
+    bottom_texture = "gas_pump_top_side.png",
+
+    right_texture = "gas_pump_bottom_side.png",
+    left_texture = "gas_pump_bottom_side.png",
+
+    front_texture = "gas_pump_bottom_front.png",
+    back_texture = "gas_pump_bottom_front.png",
+
+    pixel_box_texture_size = 32,
+    pixel_box = {
+        {
+            7,
+            0,
+            0,
+
+            25,
+            32,
+            32
+        },
+    }
+})
+
+register_tile({
+    name = "gas_pump_top",
+
+    top_texture = "gas_pump_top_side.png",
+    bottom_texture = "gas_pump_top_side.png",
+
+    right_texture = "gas_pump_top_side.png",
+    left_texture = "gas_pump_top_side.png",
+
+    front_texture = "gas_pump_top_front.png",
+    back_texture = "gas_pump_top_front.png",
+
+    pixel_box_texture_size = 32,
+    pixel_box = {
+        -- base
+        {
+            7,
+            17,
+            0,
+
+            25,
+            32,
+            32
+        },
+
+        -- left support
+        {
+            7,
+            0,
+            0,
+
+            25,
+            17,
+            2
+        },
+
+        -- right support
+        {
+            7,
+            0,
+            30,
+
+            25,
+            17,
+            32
+        },
+
+        -- cover support
+        {
+            7,
+            0,
+            0,
+
+            25,
+            2,
+            32
+        },
+
+        -- price sign
+        {
+            16,
+            5,
+            4,
+
+            16,
+            17,
+            28
+        },
+    }
 })

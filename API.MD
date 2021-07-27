@@ -28,6 +28,9 @@ register_tile(
     pixel_box_texture_size = 32,
     translucent = true,
     
+    -- directly input a nodebox and it will be digested as so
+    pixel_box_specific = {}
+    
     -- this will automatically assign the tile to be a solid pole that doesn't connect to anything.
     -- sunlight will also pass through it infinitely.
     pole = true,
