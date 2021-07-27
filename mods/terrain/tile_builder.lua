@@ -10,6 +10,7 @@ function register_tile(def)
     local sunlight_propagates
     local use_texture_alpha
     local connects_to
+    local groups = {}
 
     -- digest rotation parameter
     if (def.rotation) then
@@ -146,6 +147,15 @@ function register_tile(def)
         if (sunlight_propagates) then
             paramtype = "light"
         end
+
+    end
+
+    if (def.road) then
+        groups.road = 1
+    end
+
+    if (build_mode) then
+        groups.editor = 1
     end
 
     register_node(":" .. (def.name or "you've failed to name your tile"), {
@@ -162,7 +172,7 @@ function register_tile(def)
         liquidtype = nil,
         damage_per_second = def.dps or nil,
         waving = def.waving,
-        groups = { editor = 1 },
+        groups = groups,
         drawtype = drawtype,
         node_box = node_box,
         sunlight_propagates = sunlight_propagates,
