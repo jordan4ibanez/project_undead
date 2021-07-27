@@ -64,7 +64,7 @@ minetest.register_entity(":player_model",{
         -- this blocks the entire function to complete the animation
         if (is_climbing(self.attached_player)) then
             if (self.current_animation ~= 4) then
-                self.object:set_animation({ x = climb_over_begin, y = climb_over_end }, 20, 0, false)
+                self.object:set_animation({ x = climb_over_begin, y = climb_over_end }, 28, 0, false)
                 self.current_animation = 4
             end
             return
