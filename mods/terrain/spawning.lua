@@ -53,7 +53,7 @@ time comparison is quite easy and simple
 
 local time_begin = 20000
 local time_end = 4800
-local spawn_frequency = 1
+local spawn_frequency = 20
 
 local interest_table = {
     -- east highway gas station
