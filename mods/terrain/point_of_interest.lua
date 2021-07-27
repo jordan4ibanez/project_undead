@@ -9,6 +9,10 @@ local function roll_dice()
     return(random() * 100)
 end
 
+local function digest_time()
+    -- this must be multiplied to get a relatable time scale
+    return(get_timeofday() * 24000)
+end
 
 -- this is a table which defines where zombies/hordes spawn
 
@@ -37,7 +41,7 @@ time comparison is quite easy and simple
 
 local time_begin = 20000
 local time_end = 4800
-local spawn_frequency = 1
+local spawn_frequency = 20
 
 
 local interest_table = {
@@ -47,13 +51,11 @@ local interest_table = {
 
 
 minetest.register_globalstep(function(dtime)
-
     timer = timer + dtime
     -- only initialize every spawn_frequency seconds
     if (timer >= spawn_frequency) then
-        -- this must be multiplied to get a relatable time scale
-        current_time = get_timeofday() * 24000
         -- only spawn between acceptable times
+        current_time = digest_time()
         if (current_time > time_begin or current_time < time_end) then
             -- run through each point of interest
             for _,point in pairs(interest_table) do
@@ -62,7 +64,7 @@ minetest.register_globalstep(function(dtime)
                     -- now roll the dice and see if a horde will spawn
                     if (roll_dice() < point.horde_chance) then
                         -- someone's about to have a bad day
-                        
+
                     else
                         -- spawn zombies in amount_normal amount
 
