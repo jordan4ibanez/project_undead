@@ -1,6 +1,9 @@
 local get_timeofday = minetest.get_timeofday
 local find_nodes_in_area_under_air = minetest.find_nodes_in_area_under_air
 local add_entity = minetest.add_entity
+local get_connected_players = minetest.get_connected_players
+local get_objects_in_area = minetest.get_objects_in_area
+local vector_distance = vector.distance
 local random = math.random
 local getn = table.getn
 
@@ -10,6 +13,8 @@ local current_time = 0
 local found_spawn_locations
 local final_spawn_location
 local spawn_table_size
+local spawn_failure
+local zombie_count
 
 local function roll_dice()
     return(random() * 100)
@@ -26,7 +31,8 @@ end
 pos - base position of point of interest
 hordes - allow 30-50 zombies to spawn at once
 horde_chance - how often zombies will normally spawn in a horde (0-100%), higher is higher chance
-amount_normal = amount that will normally spawn during spawn hours (night time)
+amount_normal - amount that will normally spawn during spawn hours (night time)
+zombie_limit - how many zombies can be in the spawn area before the spawner stops until the amount goes lower
 chance - how often zombies will normally spawn (0-100%), higher is higher chance
 radius - how far away zombies can spawn, zombies will only spawn on road surfaces or inside buildings
 
@@ -51,7 +57,7 @@ local spawn_frequency = 1
 
 local interest_table = {
     -- east highway gas station
-    {pos = { x = 700, z = 11}, hordes = true, horde_chance = 50, amount_normal = 10, chance = 80, radius = 40}
+    {pos = { x = 700, y = 0, z = 11}, hordes = true, horde_chance = 50, amount_normal = 10, zombie_limit = 30, chance = 80, radius = 40}
 }
 
 
@@ -82,10 +88,32 @@ minetest.register_globalstep(function(dtime)
         if (current_time > time_begin or current_time < time_end) then
             -- run through each point of interest
             for _,point in pairs(interest_table) do
+                spawn_failure = false
+
+                -- do not attempt a spawn if any player can see it happening
+                for _,player in pairs(get_connected_players()) do
+                    if (vector_distance(player:get_pos(), point.pos) <= point.radius) then
+                        spawn_failure = true
+                        break
+                    end
+                end
+
+                zombie_count = 0
+                -- do not attempt a spawn if too many zombies already
+                for _,object in pairs(get_objects_in_area(point.min_pos, point.spawner_max_pos)) do
+                    if (not object:is_player() and object:get_luaentity().zombie) then
+                        zombie_count = zombie_count + 1
+                        if (zombie_count > point.zombie_limit) then
+                            spawn_failure = true
+                            break
+                        end
+                    end
+                end
+
                 -- roll the virtual dice to see if this will spawn more zombies
-                if (roll_dice() < point.chance) then
+                if (not spawn_failure and roll_dice() < point.chance) then
                     -- now roll the dice and see if a horde will spawn
-                    if (roll_dice() < point.horde_chance) then
+                    if (point.hordes and roll_dice() < point.horde_chance) then
                         -- someone's about to have a bad day
                         for _ = 1,random(30,50) do
                             spawn_zombie(point.min_pos, point.max_pos)
@@ -108,5 +136,7 @@ minetest.register_on_mods_loaded(function()
     for _,point in pairs(interest_table) do
         point.min_pos = { x = point.pos.x - point.radius, y = 0, z = point.pos.z - point.radius}
         point.max_pos = { x = point.pos.x + point.radius, y = 0, z = point.pos.z + point.radius}
+        -- this variable allows for ease of use in the spawning algorithm
+        point.spawner_max_pos = { x = point.pos.x + point.radius, y = 2, z = point.pos.z + point.radius}
     end
 end)

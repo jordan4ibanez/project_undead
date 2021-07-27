@@ -89,6 +89,7 @@ local function handle_locomotion(self)
 end
 
 minetest.register_entity(":zombie",{
+    zombie = true,
     visual = "mesh",
     mesh = "zombie.b3d",
     textures = {"zombie.png"},
