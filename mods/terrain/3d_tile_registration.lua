@@ -509,3 +509,8 @@ register_tile({
         },
     }
 })
+
+register_tile({
+    name = "generic_counter",
+    all_texture = "generic_counter.png",
+} )
