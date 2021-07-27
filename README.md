@@ -23,3 +23,10 @@ Tiles are a bit different than you're most likely used to. There are no ``mod:na
 When doing ``/giveme`` you can simply type in ``/giveme concrete`` for example.
 
 ---
+
+### Climbing over things
+
+If you come to an obstacle in the way, say a barrier, sand bag, guard rail, low fence, you could hold space and forwards
+to climb over it. You can not climb over everything, so plan your getaway accordingly.
+
+---
