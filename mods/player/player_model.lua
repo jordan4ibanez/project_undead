@@ -1,4 +1,5 @@
 local get_player_by_name = minetest.get_player_by_name
+local is_climbing = player_in_climb_over_animation
 
 -- avoids table look ups
 local stand_begin = 0
@@ -25,8 +26,18 @@ local aim_end = 221
 local aim_walk_begin = 222
 local aim_walk_end = 234
 
+local climb_over_begin = 235
+local climb_over_end = 255
 
+--[[
+    current_animation:
 
+    4 - climbing over
+    3 - walk hit
+    2 - walk
+    1 - hit
+    0 - stand
+]]--
 
 
 minetest.register_entity(":player_model",{
@@ -47,6 +58,15 @@ minetest.register_entity(":player_model",{
 
         if (player == nil) then
             self.object:remove()
+            return
+        end
+
+        -- this blocks the entire function to complete the animation
+        if (is_climbing(self.attached_player)) then
+            if (self.current_animation ~= 4) then
+                self.object:set_animation({ x = climb_over_begin, y = climb_over_end }, 20, 0, false)
+                self.current_animation = 4
+            end
             return
         end
 

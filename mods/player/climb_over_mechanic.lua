@@ -13,6 +13,8 @@ local vector_distance = vector.distance
 local vector_multiply = vector.multiply
 local new_vector = vector.new
 
+local climb_over_events = {}
+
 local function digest_direction(dir)
     return facedir_to_dir(dir_to_facedir(dir))
 end
@@ -21,8 +23,9 @@ local function floor(pos)
     return vector_floor(vector_add(pos, 0.5))
 end
 
-
-local climb_over_events = {}
+function player_in_climb_over_animation(player_name)
+    return climb_over_events[player_name] ~= nil
+end
 
 register_globalstep(function(dtime)
     for _,player in pairs(get_connected_players()) do
