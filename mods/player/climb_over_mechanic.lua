@@ -8,7 +8,6 @@ local get_node = minetest.get_node
 local vector_add = vector.add
 local vector_direction = vector.direction
 local vector_floor = vector.floor
-local vector_divide = vector.divide
 local vector_distance = vector.distance
 local vector_multiply = vector.multiply
 local new_vector = vector.new

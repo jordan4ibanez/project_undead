@@ -31,7 +31,8 @@ local climb_over_end = 255
 
 --[[
     current_animation:
-
+    6 - holding gun walking
+    5 - holding gun
     4 - climbing over
     3 - walk hit
     2 - walk
@@ -77,6 +78,8 @@ minetest.register_entity(":player_model",{
         local hitting = false
         local aiming = false
 
+        local holding_gun = true
+
         local control_bits = player:get_player_control_bits()
 
         -- zoom
@@ -87,7 +90,9 @@ minetest.register_entity(":player_model",{
         -- place
         if (control_bits >= 256) then
             control_bits = control_bits - 256
-            aiming = true
+            if (holding_gun) then
+                aiming = true
+            end
         end
 
         -- dig
@@ -141,19 +146,25 @@ minetest.register_entity(":player_model",{
 
         -- digest booleans and do animation
 
-        if (moving and hitting and self.current_animation ~= 3) then
+        if (aiming and moving and self.current_animation ~= 6) then
+            self.object:set_animation({ x = aim_walk_begin, y = aim_walk_end }, 20, 0, true)
+            self.current_animation = 6
+        elseif (aiming and not moving and self.current_animation ~= 5) then
+            self.object:set_animation({ x = aim_begin, y = aim_end }, 20, 0, true)
+            self.current_animation = 5
+        elseif (not aiming and moving and hitting and self.current_animation ~= 3) then
             self.object:set_animation({ x = walk_hit_begin, y = walk_hit_end }, 20, 0, true)
             self.current_animation = 3
 
-        elseif (moving and not hitting and self.current_animation ~= 2) then
+        elseif (not aiming and moving and not hitting and self.current_animation ~= 2) then
             self.object:set_animation({ x = walk_begin, y = walk_end }, 20, 0, true)
             self.current_animation = 2
 
-        elseif (hitting and not moving and self.current_animation ~= 1) then
+        elseif (not aiming and hitting and not moving and self.current_animation ~= 1) then
             self.object:set_animation({ x = hit_begin, y = hit_end }, 20, 0, true)
             self.current_animation = 1
 
-        elseif (not hitting and not moving and self.current_animation ~= 0) then
+        elseif (not aiming and not hitting and not moving and self.current_animation ~= 0) then
             self.object:set_animation({ x = stand_begin, y = stand_end }, 20, 0, true)
             self.current_animation = 0
 

@@ -85,6 +85,7 @@ end
 
 minetest.register_entity(":zombie",{
     zombie = true,
+    health = 100,
     visual = "mesh",
     mesh = "zombie.b3d",
     textures = {"zombie.png"},
