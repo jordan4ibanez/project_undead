@@ -1,5 +1,6 @@
 local get_player_by_name = minetest.get_player_by_name
 local is_climbing = player_in_climb_over_animation
+local get_item_group = minetest.get_item_group
 
 -- avoids table look ups
 local stand_begin = 0
@@ -41,6 +42,68 @@ local climb_over_end = 255
 ]]--
 
 
+minetest.register_entity(":player_holding_item", {
+    initial_properties = {
+        hp_max           = 1,
+        visual           = "wielditem",
+        physical         = false,
+        textures         = {""},
+        is_visible       = true,
+        pointable        = false,
+        collide_with_objects = false,
+        collisionbox = {0, 0, 0, 0, 0, 0},
+        selectionbox = {0, 0, 0, 0, 0, 0},
+        visual_size  = {x = 0.2, y = 0.2},
+    },
+    itemstring = "",
+    set_item = function(self, item)
+        if (self.itemstring == item) then
+            return
+        end
+
+        if (item == "") then
+            item = "invisible_hand"
+        end
+
+        local stack = ItemStack(item or self.itemstring)
+        self.itemstring = stack:to_string()
+        local item_texture = (stack:is_known() and stack:get_definition().inventory_image) or "unknown"
+        local scale_x = get_item_group(self.itemstring, "scale_x")
+        local scale_y = get_item_group(self.itemstring, "scale_y")
+        local scale_z = get_item_group(self.itemstring, "scale_z")
+        self.object:set_properties({
+            textures = {item_texture},
+            wield_item = self.itemstring,
+            visual_size  = {x = scale_x, y = scale_y, z = scale_z},
+        })
+    end,
+    attached_player = nil,
+    timer = 0,
+    on_step = function(self,dtime)
+        self.timer = self.timer + dtime
+
+        -- wielded item entity does not need to update often
+        if (self.timer >= 0.25) then
+            if (self.attached_player == nil) then
+                self.object:remove()
+                return
+            end
+
+            local player = get_player_by_name(self.attached_player)
+
+            if (player == nil) then
+                self.object:remove()
+                return
+            end
+
+            local item = player:get_wielded_item():get_name()
+
+            self.set_item(self,item)
+        end
+    end,
+})
+
+
 minetest.register_entity(":player_model",{
     visual = "mesh",
     mesh = "player.b3d",
@@ -78,7 +141,7 @@ minetest.register_entity(":player_model",{
         local hitting = false
         local aiming = false
 
-        local holding_gun = true
+        local holding_gun = false
 
         local control_bits = player:get_player_control_bits()
 
@@ -196,7 +259,15 @@ minetest.register_on_joinplayer(function(player)
     player:set_properties({
         textures = {"invisible.png"},
     })
+
+    local name = player:get_player_name()
+
     local model = minetest.add_entity(player:get_pos(), "player_model")
-    model:get_luaentity().attached_player = player:get_player_name()
+    model:get_luaentity().attached_player = name
     model:set_attach(player,"", {x=0,y=0,z=-1.5}, {x=0,y=0,z=0}, true)
+
+    -- this is an attachment linkage to the player model entity
+    local wield_item = minetest.add_entity(player:get_pos(), "player_holding_item")
+    wield_item:get_luaentity().attached_player = name
+    wield_item:set_attach(model,"Arm_Right", {x=0,y=6,z=1}, {x=90,y=0,z=-90}, true)
 end)
