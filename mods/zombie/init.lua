@@ -23,14 +23,9 @@ local attack_walk_end = 220
 local wander_start = 221
 local wander_end = 241
 
-local pos
-local pos2
-local target_distance
-
-local behavior_selection
 
 local function search_for_player(self)
-    pos = self.object:get_pos()
+    local pos = self.object:get_pos()
     pos.y = 0
 
     -- the zombie will keep walking this way regardless
@@ -38,10 +33,10 @@ local function search_for_player(self)
     self.current_target_distance = 100
 
     for _,player in pairs(get_connected_players()) do
-        pos2 = player:get_pos()
+        local pos2 = player:get_pos()
         pos2.y = 0
 
-        target_distance = vector_distance(pos, pos2)
+        local target_distance = vector_distance(pos, pos2)
         -- 20 tiles away
         if (target_distance <= 20 and target_distance < self.current_target_distance) then
             --give chase
@@ -68,7 +63,7 @@ local function handle_animation(self)
 end
 
 local function cycle_random_behavior(self)
-    behavior_selection = random(0,1)
+    local behavior_selection = random(0,1)
     if (behavior_selection == 1) then
         behavior_selection = 2
     end
