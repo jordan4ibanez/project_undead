@@ -1,16 +1,6 @@
 local get_player_by_name = minetest.get_player_by_name
 
--- animation localities
-local player = nil
-local control_bits = 0
-
-local hitting = false
-local crouching = false
-local moving = false
-local aiming = false
-
 -- avoids table look ups
-
 local stand_begin = 0
 local stand_end = 80
 
@@ -53,7 +43,7 @@ minetest.register_entity(":player_model",{
             return
         end
 
-        player = get_player_by_name(self.attached_player)
+        local player = get_player_by_name(self.attached_player)
 
         if (player == nil) then
             self.object:remove()
@@ -62,12 +52,12 @@ minetest.register_entity(":player_model",{
 
         -- a cache happy way to intercept player controls
 
-        crouching = false
-        moving = false
-        hitting = false
-        aiming = false
+        local crouching = false
+        local moving = false
+        local hitting = false
+        local aiming = false
 
-        control_bits = player:get_player_control_bits()
+        local control_bits = player:get_player_control_bits()
 
         -- zoom
         if (control_bits >= 512) then
