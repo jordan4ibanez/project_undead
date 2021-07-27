@@ -158,6 +158,9 @@ function register_tile(def)
         groups.editor = 1
     end
 
+    -- finally, disable fall damage
+    groups.fall_damage_add_percent = -100
+
     register_node(":" .. (def.name or "you've failed to name your tile"), {
         description = def.description,
         tiles = tiles,
