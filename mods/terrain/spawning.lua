@@ -1,9 +1,15 @@
 local get_timeofday = minetest.get_timeofday
+local find_nodes_in_area_under_air = minetest.find_nodes_in_area_under_air
+local add_entity = minetest.add_entity
 local random = math.random
+local getn = table.getn
 
 -- cached data
 local timer = 0
 local current_time = 0
+local found_spawn_locations
+local final_spawn_location
+local spawn_table_size
 
 local function roll_dice()
     return(random() * 100)
@@ -41,8 +47,7 @@ time comparison is quite easy and simple
 
 local time_begin = 20000
 local time_end = 4800
-local spawn_frequency = 20
-
+local spawn_frequency = 1
 
 local interest_table = {
     -- east highway gas station
@@ -50,10 +55,28 @@ local interest_table = {
 }
 
 
+local function spawn_zombie(min_pos, max_pos)
+    final_spawn_location = nil
+
+    found_spawn_locations = find_nodes_in_area_under_air(min_pos, max_pos, "group:road")
+
+    spawn_table_size = getn(found_spawn_locations)
+
+    if (found_spawn_locations and spawn_table_size > 0) then
+        final_spawn_location = found_spawn_locations[random(1, spawn_table_size)]
+    end
+
+    if (final_spawn_location) then
+        final_spawn_location.y = final_spawn_location.y + 0.5
+        add_entity(final_spawn_location, "zombie")
+    end
+end
+
 minetest.register_globalstep(function(dtime)
     timer = timer + dtime
     -- only initialize every spawn_frequency seconds
     if (timer >= spawn_frequency) then
+        timer = 0
         -- only spawn between acceptable times
         current_time = digest_time()
         if (current_time > time_begin or current_time < time_end) then
@@ -64,11 +87,14 @@ minetest.register_globalstep(function(dtime)
                     -- now roll the dice and see if a horde will spawn
                     if (roll_dice() < point.horde_chance) then
                         -- someone's about to have a bad day
-
+                        for _ = 1,random(30,50) do
+                            spawn_zombie(point.min_pos, point.max_pos)
+                        end
                     else
                         -- spawn zombies in amount_normal amount
-
-
+                        for _ = 1,random(1,point.amount_normal) do
+                            spawn_zombie(point.min_pos, point.max_pos)
+                        end
                     end
                 end
             end
@@ -76,3 +102,11 @@ minetest.register_globalstep(function(dtime)
     end
 end)
 
+
+-- digest positions and add needed data automatically
+minetest.register_on_mods_loaded(function()
+    for _,point in pairs(interest_table) do
+        point.min_pos = { x = point.pos.x - point.radius, y = 0, z = point.pos.z - point.radius}
+        point.max_pos = { x = point.pos.x + point.radius, y = 0, z = point.pos.z + point.radius}
+    end
+end)
