@@ -4,11 +4,6 @@ register_tile({
 })
 
 register_tile({
-    name = "outer_wall_blue",
-    all_texture = "outer_wall_blue.png"
-})
-
-register_tile({
     name = "gas_n_go_sign",
     top_texture = "gas_n_go_sign_edge.png",
     bottom_texture = "gas_n_go_sign_edge.png",
@@ -513,4 +508,44 @@ register_tile({
 register_tile({
     name = "generic_counter",
     all_texture = "generic_counter.png",
-} )
+})
+
+register_tile({
+    name = "outer_wall_blue",
+    all_texture = "outer_wall_blue.png"
+})
+
+register_tile({
+    name = "outer_wall_black",
+    all_texture = "outer_wall_black.png"
+})
+
+register_tile({
+    name = "outer_wall_green",
+    all_texture = "outer_wall_green.png"
+})
+
+register_tile({
+    name = "outer_wall_grey",
+    all_texture = "outer_wall_grey.png"
+})
+
+register_tile({
+    name = "outer_wall_orange",
+    all_texture = "outer_wall_orange.png"
+})
+
+register_tile({
+    name = "outer_wall_red",
+    all_texture = "outer_wall_red.png"
+})
+
+register_tile({
+    name = "outer_wall_white",
+    all_texture = "outer_wall_white.png"
+})
+
+register_tile({
+    name = "outer_wall_yellow",
+    all_texture = "outer_wall_yellow.png"
+})
