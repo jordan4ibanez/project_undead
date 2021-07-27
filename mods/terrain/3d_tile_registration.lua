@@ -1,9 +1,4 @@
 register_tile({
-    name = "concrete",
-    all_texture = "concrete.png"
-})
-
-register_tile({
     name = "gas_n_go_sign",
     top_texture = "gas_n_go_sign_edge.png",
     bottom_texture = "gas_n_go_sign_edge.png",
@@ -391,7 +386,8 @@ register_tile({
         }, -- x+
     },
 
-    connects_to = {"guardrail"}
+    connects_to = {"guardrail"},
+    climb_over = true,
 })
 
 register_tile({
@@ -405,7 +401,8 @@ register_tile({
         connect_left = { { -0.5, -0.5, -0.35, 0.35, -0.4, 0.35 }, { -0.5, -0.5, -0.15, 0.15, 0.5, 0.15 } }, -- x-
         connect_right = { { -0.35, -0.5, -0.35, 0.5, -0.4, 0.35 }, { -0.15, -0.5, -0.15, 0.5, 0.5, 0.15 } }, -- x+
     },
-    connects_to = {"jersey_barrier"}
+    connects_to = {"jersey_barrier"},
+    climb_over = true,
 })
 
 register_tile({

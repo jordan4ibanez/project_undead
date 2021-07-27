@@ -5,6 +5,12 @@ register_tile({
 })
 
 register_tile({
+    name = "concrete",
+    top_texture = "concrete.png",
+    road = true,
+})
+
+register_tile({
     name = "road",
     top_texture = "road.png",
     road = true,
