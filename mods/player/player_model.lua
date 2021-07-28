@@ -260,25 +260,20 @@ minetest.register_entity(":player_model",{
         elseif (not aiming and moving and hitting and self.current_animation ~= 3) then
             self.object:set_animation({ x = walk_hit_begin, y = walk_hit_end }, 20, 0, true)
             self.current_animation = 3
-
         elseif (not aiming and moving and not hitting and self.current_animation ~= 2) then
             self.object:set_animation({ x = walk_begin, y = walk_end }, 20, 0, true)
             self.current_animation = 2
-
         elseif (not aiming and hitting and not moving and self.current_animation ~= 1) then
             self.object:set_animation({ x = hit_begin, y = hit_end }, 20, 0, true)
             self.current_animation = 1
-
         elseif (not aiming and not hitting and not moving and self.current_animation ~= 0) then
             self.object:set_animation({ x = stand_begin, y = stand_end }, 20, 0, true)
             self.current_animation = 0
-
         end
 
         -- digest player look pitch
-
         self.object:set_bone_position("Head",{x = 0, y = 6.25, z = 0}, {x = player:get_look_vertical() * -45, y = 0, z = 0})
-
+        
         -- crouching needs an animation
         --[[
         if (crouching) then
