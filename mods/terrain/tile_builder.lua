@@ -162,9 +162,13 @@ function register_tile(def)
         groups.climb_over = 1
     end
 
-    -- finally, disable fall damage
+
+    -- disable fall damage
     groups.fall_damage_add_percent = -100
 
+    -- disable jumping
+    groups.disable_jump = 1
+    
     register_node(":" .. (def.name or "you've failed to name your tile"), {
         description = def.description,
         tiles = tiles,
