@@ -63,21 +63,15 @@ function register_vehicle(def)
         end,
 
         on_activate = function(self)
-
             local pos = self.object:get_pos()
-
             -- front right wheel
             self.fr_wheel = spawn_wheel(self.object, pos, wheel_type, def.scale, def.front_wheel_scale.x, def.front_wheel_scale.y, def.front_track_width, def.front_suspension_height, def.front_wheel_base)
-
             -- front left wheel
             self.fl_wheel = spawn_wheel(self.object, pos, wheel_type, def.scale, def.front_wheel_scale.x, def.front_wheel_scale.y, -def.front_track_width, def.front_suspension_height, def.front_wheel_base)
-
             -- rear right wheel
             self.rr_wheel = spawn_wheel(self.object, pos, wheel_type, def.scale, def.rear_wheel_scale.x, def.rear_wheel_scale.y, def.rear_track_width, def.rear_suspension_height, -def.rear_wheel_base)
-
             -- rear left wheel
-            self.rr_wheel = spawn_wheel(self.object, pos, wheel_type, def.scale, def.rear_wheel_scale.x, def.rear_wheel_scale.y, -def.rear_track_width, def.rear_suspension_height, -def.rear_wheel_base)
-
+            self.rl_wheel = spawn_wheel(self.object, pos, wheel_type, def.scale, def.rear_wheel_scale.x, def.rear_wheel_scale.y, -def.rear_track_width, def.rear_suspension_height, -def.rear_wheel_base)
         end
     })
 
