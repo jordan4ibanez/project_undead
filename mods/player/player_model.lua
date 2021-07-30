@@ -41,6 +41,8 @@ local climb_over_end = 255
     0 - stand
 ]]--
 
+local models = {}
+
 local function player_is_aiming(player)
     local control_bits = player:get_player_control_bits()
 
@@ -291,6 +293,12 @@ minetest.register_entity(":player_model",{
     end
 })
 
+function set_player_model_visibility(player,is_visible)
+    local name = player:get_player_name()
+    models[name].wield_item:set_properties({is_visible = is_visible})
+    models[name].model:set_properties({is_visible = is_visible})
+end
+
 minetest.register_on_joinplayer(function(player)
     --removes the 2D green guy
     player:set_properties({
@@ -307,4 +315,6 @@ minetest.register_on_joinplayer(function(player)
     local wield_item = minetest.add_entity(player:get_pos(), "player_holding_item")
     wield_item:get_luaentity().attached_player = name
     wield_item:set_attach(model,"Arm_Right", {x=0,y=6,z=1}, {x=90,y=0,z=-90}, true)
+
+    models[name] = {wield_item = wield_item, model = model}
 end)
