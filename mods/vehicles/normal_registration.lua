@@ -65,5 +65,5 @@ register_vehicle({
 
     vehicle_height = 1.95,
     height_offset = -0.9,
-    vehicle_width = 0.9,
+    vehicle_width = 1.1,
 })
