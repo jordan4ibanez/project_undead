@@ -15,7 +15,7 @@ Minetest is commonly used to create block based games, ala, [this](https://forum
 [this](https://forum.minetest.net/viewtopic.php?f=15&t=13700),
 [this](https://forum.minetest.net/viewtopic.php?f=15&t=24492),
 [this](https://forum.minetest.net/viewtopic.php?f=15&t=9196),
-[and this!](https://forum.minetest.net/viewtopic.php?f=15&t=20986) 
+[and this!](https://forum.minetest.net/viewtopic.php?f=15&t=20986) (Links work if the forum isn't down!)
 
 What this game is using the engine for is a bit different. Hopefully, you enjoy it.
 
