@@ -107,7 +107,7 @@ function register_tile(def)
 
         local fixed
 
-        if (build_mode) then
+        if (editor_mode) then
             fixed = {
                 { -0.15, -0.5, -0.15, 0.15, 0.5, 0.15 }
             }
@@ -154,7 +154,7 @@ function register_tile(def)
         groups.road = 1
     end
 
-    if (build_mode) then
+    if (editor_mode) then
         groups.editor = 1
     end
 
@@ -174,8 +174,8 @@ function register_tile(def)
         tiles = tiles,
         paramtype = paramtype,
         paramtype2 = param2,
-        pointable = def.pointable or (build_mode or false),
-        diggable = build_mode or false,
+        pointable = def.pointable or (editor_mode or false),
+        diggable = editor_mode or false,
         is_ground_content = false,
         buildable_to = false,
         floodable = false,

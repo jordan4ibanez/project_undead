@@ -1,4 +1,4 @@
-if (build_mode) then
+if (editor_mode) then
     minetest.override_item("", {
         range = 100,
         tool_capabilities = {

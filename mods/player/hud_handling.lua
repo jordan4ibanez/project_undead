@@ -8,7 +8,7 @@ local hud = {}
 
 function run_initial_hud_creation(player)
     --basically turn everything off
-    if (not build_mode) then
+    if (not editor_mode) then
         player:hud_set_flags({crosshair = false, wielditem = false, hotbar = false, healthbar = false, breathbar = false, minimap = true, minimap_radar = false})
     end
 

@@ -1,4 +1,4 @@
-build_mode = (minetest.settings:get("build_mode") == "true")
+editor_mode = (minetest.settings:get("editor_mode") == "true")
 
 local path = minetest.get_modpath("terrain").."/"
 

@@ -6,17 +6,20 @@
 ---
 
 
-### Build Mode
+### Editor Mode
 
 There is no editor gui yet, so you'll have to look through the registrations in the terrain mod to get tile names.
 
 You can add this to your minetest.conf if you want to edit the map.
 
-```build_mode = true```
+```editor_mode = true```
 
-Alternatively you can just type in this, go to the main menu, then go back into the game to go into build mode.
+Alternatively you can just type in this, go to the main menu, then go back into the game to go into editor mode.
 
-```/set -n build_mode true```
+This is useful for content creators to customize the environment, along with making all new environments for players to
+survive in.
+
+```/set editor_mode true```
 
 Tiles are a bit different than you're most likely used to. There are no ``mod:names_seperated_by_colon``.
 
