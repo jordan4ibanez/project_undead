@@ -1,5 +1,5 @@
 -- 4 door sedan - police variant
--- taller, faster, more aerodynamic, better braking
+-- taller, faster, more aerodynamic, bigger wheels, better braking
 register_vehicle({
     name = "huxton_roadster_police",
     info = "Huxton Roadster Police Interceptor",
@@ -7,7 +7,7 @@ register_vehicle({
 
     mesh = "huxton_roadster.obj",
     texture = "huxton_roadster_police.png",
-    scale = 26,
+    scale = 22,
     wheel = "normal",
     wheel_animation_multiplier = 5,
 
@@ -19,17 +19,17 @@ register_vehicle({
     max_speed = 80,
     max_reverse_speed = -9,
 
-    front_wheel_scale = { x = 5, y = 6},
-    front_track_width = 13,
-    front_suspension_height = 11.8,
-    front_wheel_base = 28,
+    front_wheel_scale = { x = 4.5, y = 5.2},
+    front_track_width = 11,
+    front_suspension_height = 10,
+    front_wheel_base = 24,
 
-    rear_wheel_scale = { x = 5, y = 6},
-    rear_track_width = 13,
-    rear_suspension_height = 11.8,
-    rear_wheel_base = 18.5,
+    rear_wheel_scale = { x = 4.5, y = 5.2},
+    rear_track_width = 11,
+    rear_suspension_height = 10,
+    rear_wheel_base = 15.5,
 
-    vehicle_height = 2.3,
-    height_offset = -1.75,
-    vehicle_width = 1.4,
+    vehicle_height = 2.175,
+    height_offset = -1.5,
+    vehicle_width = 1.25,
 })

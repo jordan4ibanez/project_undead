@@ -6,7 +6,7 @@ register_vehicle({
 
     mesh = "huxton_roadster.obj",
     texture = "huxton_roadster_bronze.png",
-    scale = 26,
+    scale = 22,
     wheel = "normal",
     wheel_animation_multiplier = 5,
 
@@ -18,19 +18,19 @@ register_vehicle({
     max_speed = 50,
     max_reverse_speed = -6,
 
-    front_wheel_scale = { x = 5, y = 6},
-    front_track_width = 13,
-    front_suspension_height = 10.7,
-    front_wheel_base = 28,
+    front_wheel_scale = { x = 4, y = 4.7},
+    front_track_width = 11,
+    front_suspension_height = 9,
+    front_wheel_base = 24,
 
-    rear_wheel_scale = { x = 5, y = 6},
-    rear_track_width = 13,
-    rear_suspension_height = 10.7,
-    rear_wheel_base = 18.5,
+    rear_wheel_scale = { x = 4, y = 4.7},
+    rear_track_width = 11,
+    rear_suspension_height = 9,
+    rear_wheel_base = 15.5,
 
-    vehicle_height = 2.3,
-    height_offset = -1.65,
-    vehicle_width = 1.4,
+    vehicle_height = 2,
+    height_offset = -1.35,
+    vehicle_width = 1.25,
 })
 
 -- 4 door sports car
