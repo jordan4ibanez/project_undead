@@ -1,6 +1,5 @@
-## API information for project undead
+# API information for project undead
 
----
 ### register_tile 
 This is a wrapper for minetest.register node, which makes it simpler to add nodes, now called tiles, into the game.
 
