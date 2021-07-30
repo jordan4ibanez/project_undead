@@ -89,6 +89,8 @@ function register_vehicle(def)
 
         on_step = function(self, dtime)
             debug_steering(self, dtime)
+
+            self.object:set_yaw(self.object:get_yaw() + (dtime * 0.5))
         end,
 
         on_activate = function(self)
