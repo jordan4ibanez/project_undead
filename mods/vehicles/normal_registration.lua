@@ -20,12 +20,12 @@ register_vehicle({
 
     front_wheel_scale = { x = 5, y = 6},
     front_track_width = 13,
-    front_suspension_height = 10.5,
+    front_suspension_height = 10.7,
     front_wheel_base = 28,
 
     rear_wheel_scale = { x = 5, y = 6},
     rear_track_width = 13,
-    rear_suspension_height = 10.5,
+    rear_suspension_height = 10.7,
     rear_wheel_base = 18.5,
 
     vehicle_height = 2.3,
