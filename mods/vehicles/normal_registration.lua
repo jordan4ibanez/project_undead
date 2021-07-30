@@ -2,7 +2,7 @@
 register_vehicle({
     name = "huxton_roadster",
     info = "Huxton Roadster",
-    class = "muscle",
+    class = "normal",
 
     mesh = "huxton_roadster.obj",
     texture = "huxton_roadster_bronze.png",
