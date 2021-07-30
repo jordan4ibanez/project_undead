@@ -15,6 +15,31 @@ local function spawn_wheel(vehicle, pos, wheel_type, vehicle_scale, wheel_width,
 end
 
 
+local function debug_steering(self, dtime)
+    if (not self.steering_up) then
+        self.steering_angle = self.steering_angle - (dtime * 100)
+    else
+        self.steering_angle = self.steering_angle + (dtime * 100)
+    end
+
+    if (self.steering_angle <= -45 or self.steering_angle >= 45) then
+        self.steering_up = not self.steering_up
+    end
+
+
+    if (self.fr_wheel and self.fr_wheel:get_luaentity()) then
+        local parent,bone,position = self.fr_wheel:get_attach()
+        self.fr_wheel:set_attach(parent,bone,position,{ x = 0, y = self.steering_angle, z = 0 })
+    end
+
+    if (self.fl_wheel and self.fl_wheel:get_luaentity()) then
+        local parent,bone,position = self.fl_wheel:get_attach()
+        self.fl_wheel:set_attach(parent,bone,position,{ x = 0, y = self.steering_angle, z = 0 })
+    end
+
+    print(self.steering_angle)
+end
+
 
 function register_vehicle(def)
     -- allow nil value
@@ -48,6 +73,7 @@ function register_vehicle(def)
         textures = {def.texture},
         pointable = false,
         visual_size = {x = def.scale, y = def.scale},
+
         player_seat_fl = nil,
         player_seat_fr = nil,
         player_seat_rl = nil,
@@ -58,8 +84,11 @@ function register_vehicle(def)
         rr_wheel = nil,
         rl_wheel = nil,
 
-        on_step = function(self,dtime)
+        steering_angle = 0,
+        steering_up = false,
 
+        on_step = function(self, dtime)
+            debug_steering(self, dtime)
         end,
 
         on_activate = function(self)
@@ -107,7 +136,7 @@ register_entity(":normal_wheel",{
             end
             -- the lifetime of the model will perpetually be in this animation
             -- only the speed will vary, starts off at 0
-            self.object:set_animation({ x = 0, y = 40 }, 0, 0, true)
+            self.object:set_animation({ x = 0, y = 40 }, 30, 0, true)
         end)
     end,
 
