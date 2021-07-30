@@ -3,8 +3,23 @@
 
  ## A zombie survival game in the Minetest engine
 
----
+### What the hell is a Minetest engine?
 
+I'm so glad you asked! The Minetest engine, as described on [the website](https://www.minetest.net), is: 
+
+"An open source voxel game engine. Play one of our many games, mod a game to your liking, make your own game, or play on a multiplayer server."
+
+Wow! This sounds like a cheap Minecraft clone! Well it's even better than cheap, it's free. [And you can browse the code here.](https://github.com/minetest/minetest)
+
+Minetest is commonly used to create block based games, ala, [this](https://forum.minetest.net/viewtopic.php?t=16407),
+[this](https://forum.minetest.net/viewtopic.php?f=15&t=13700),
+[this](https://forum.minetest.net/viewtopic.php?f=15&t=24492),
+[this](https://forum.minetest.net/viewtopic.php?f=15&t=9196),
+[and this!](https://forum.minetest.net/viewtopic.php?f=15&t=20986) 
+
+What this game is using the engine for is a bit different. Hopefully, you enjoy it.
+
+---
 
 ### Editor Mode
 
