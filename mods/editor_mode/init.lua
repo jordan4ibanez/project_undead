@@ -1,0 +1,1 @@
+editor_mode = (minetest.settings:get("editor_mode") == "true") or false

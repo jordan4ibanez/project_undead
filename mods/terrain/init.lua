@@ -1,5 +1,3 @@
-editor_mode = (minetest.settings:get("editor_mode") == "true")
-
 local path = minetest.get_modpath("terrain").."/"
 
 dofile(path.."tile_builder.lua")

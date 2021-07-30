@@ -4,6 +4,8 @@ local insert = table.insert
 
 local vehicle_data = {sport = {}, police = {}, normal = {}}
 
+local drivers = {}
+
 local function spawn_wheel(vehicle, pos, wheel_type, vehicle_scale, wheel_width, wheel_height, track_width, suspension_height, wheel_base)
     local wheel = minetest.add_entity(pos, wheel_type)
     if (wheel) then
@@ -71,7 +73,7 @@ function register_vehicle(def)
         visual = "mesh",
         mesh = def.mesh,
         textures = {def.texture},
-        pointable = false,
+        pointable = editor_mode or false,
         visual_size = {x = def.scale, y = def.scale},
 
         player_seat_fl = nil,
