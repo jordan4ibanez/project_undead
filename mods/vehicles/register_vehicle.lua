@@ -284,10 +284,20 @@ function register_vehicle(def)
     -- allow nil wheel animation multiplier
     def.wheel_animation_multiplier = def.wheel_animation_multiplier or 1
 
+    -- texture takes priority over textures
+    if (def.texture) then
+        def.textures = {def.texture}
+    elseif (def.textures) then
+        def.textures = def.textures
+    -- allow nil texture definition - automatically warns through string linkage
+    else
+        def.textures = {"There is no texture for vehicle: " .. def.name}
+    end
+
     register_entity(":"..def.name,{
         visual = "mesh",
         mesh = def.mesh,
-        textures = {def.texture},
+        textures = def.textures,
         pointable = true,
         visual_size = {x = def.scale, y = def.scale},
 
