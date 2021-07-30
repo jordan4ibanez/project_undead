@@ -44,10 +44,10 @@ register_globalstep(function(dtime)
             if (vector_distance(player_pos, event.end_pos) > 0.15 and event.timer < 1) then
                 local direction = vector_direction(player_pos, event.end_pos)
                 direction = vector_multiply(direction, dtime * 2)
-                player:move_to(vector_add(player_pos,direction))
+                player:set_pos(vector_add(player_pos,direction))
             -- return to normal
             else
-                player:move_to(event.end_pos)
+                player:set_pos(event.end_pos)
                 player:set_physics_override({speed = 1})
                 climb_over_events[name] = nil
             end
