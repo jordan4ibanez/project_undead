@@ -7,12 +7,21 @@ register_vehicle({
 register_vehicle({
     name = "hearken_autobahn",
     info = "Hearken Autobahn 2.2L",
+    class = "sport",
+
     mesh = "hearken_autobahn.obj",
     texture = "hearken_autobahn.png",
     scale = 27,
     wheel = "normal",
-    power = "190",
-    class = "sport",
+    wheel_animation_multiplier = 5,
+
+    -- power, brake, friction = 0 - 1000
+    power = 190,
+    brake_force = 300,
+    air_resistance = 40, -- higher means car slows down faster
+    -- do not exceed 80 - outrun map loading
+    max_speed = 50,
+    max_reverse_speed = -5,
 
     front_wheel_scale = { x = 4.5, y = 4.5},
     front_track_width = 10,
@@ -23,4 +32,8 @@ register_vehicle({
     rear_track_width = 10,
     rear_suspension_height = 5,
     rear_wheel_base = 13.6,
+
+    vehicle_height = 1.95,
+    vehicle_width = 0.9,
+    height_offset = -0.9,
 })

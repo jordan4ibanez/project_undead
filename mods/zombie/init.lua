@@ -74,12 +74,17 @@ end
 
 
 local function handle_locomotion(self)
+    local velocity = self.object:get_velocity()
     if (self.behavior == 0) then
-        self.object:set_velocity({ x = 0, y = 0, z = 0})
+        self.object:set_velocity({ x = 0, y = velocity.y, z = 0})
     elseif (self.behavior == 1) then
-        self.object:set_velocity(vector_multiply(yaw_to_dir(self.object:get_yaw()), 2))
+        local new_velocity = vector_multiply(yaw_to_dir(self.object:get_yaw()), 2)
+        new_velocity.y = velocity.y
+        self.object:set_velocity(new_velocity)
     elseif (self.behavior == 2) then
-        self.object:set_velocity(vector_multiply(yaw_to_dir(self.object:get_yaw()), 1.5))
+        local new_velocity = vector_multiply(yaw_to_dir(self.object:get_yaw()), 1.5)
+        new_velocity.y = velocity.y
+        self.object:set_velocity(new_velocity)
     end
 end
 
@@ -135,7 +140,7 @@ minetest.register_entity(":zombie",{
     end,
 
     on_activate = function(self)
-        self.object:set_acceleration({ x = 0, y = -10, z = 0 })
+        self.object:set_acceleration({ x = 0, y = -100, z = 0 })
         self.object:set_animation({ x = stand_start, y = stand_end }, 20, 0, true)
         self.current_animation = 0
     end
