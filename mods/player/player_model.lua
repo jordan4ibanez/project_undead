@@ -196,7 +196,7 @@ minetest.register_entity(":player_model",{
         -- this blocks the entire function to complete this animation
         if (is_climbing_off_ladder(self.attached_player)) then
             if (self.current_animation ~= 9) then
-                self.object:set_animation({ x = ladder_climb_off_begin, y = ladder_climb_off_end }, 28, 0, true)
+                self.object:set_animation({ x = ladder_climb_off_begin, y = ladder_climb_off_end }, 23, 0, false)
                 self.current_animation = 9
             end
             return
