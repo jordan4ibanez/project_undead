@@ -12,7 +12,7 @@ local vector_distance = vector.distance
 local vector_multiply = vector.multiply
 local new_vector = vector.new
 
-local climb_over_events = {}
+local climb_event = {}
 
 local function digest_direction(dir)
     return facedir_to_dir(dir_to_facedir(dir))
@@ -22,8 +22,8 @@ local function floor(pos)
     return vector_floor(vector_add(pos, 0.5))
 end
 
-function player_in_climb_over_animation(player_name)
-    return climb_over_events[player_name] ~= nil
+function player_in_climb_event(player_name)
+    return climb_event[player_name] ~= nil
 end
 
 register_globalstep(function(dtime)
@@ -32,11 +32,11 @@ register_globalstep(function(dtime)
         local name = player:get_player_name()
 
         -- run through climb over event
-        if (climb_over_events[name]) then
+        if (climb_event[name]) then
 
             local player_pos = player:get_pos()
 
-            local event = climb_over_events[name]
+            local event = climb_event[name]
 
             event.timer = event.timer + dtime
 
@@ -49,12 +49,11 @@ register_globalstep(function(dtime)
             else
                 player:set_pos(event.end_pos)
                 player:set_physics_override({speed = 1})
-                climb_over_events[name] = nil
+                climb_event[name] = nil
             end
 
         -- do climb over scanning
         else
-
             -- a cache happy way to intercept player controls
             local initialize_climb = false
             local moving_forward = false
@@ -161,7 +160,7 @@ register_globalstep(function(dtime)
                             finalized_pos.y = real_pos.y
 
                             -- begin climb over animation
-                            climb_over_events[name] = {start_pos = real_pos, end_pos = finalized_pos, timer = 0}
+                            climb_event[name] = { start_pos = real_pos, end_pos = finalized_pos, timer = 0}
                             player:set_physics_override({speed = 0})
                         end
                     end
