@@ -3,6 +3,7 @@ local is_climbing_over = player_climbing_over
 local is_climbing_ladder = player_climbing_ladder
 local is_on_ladder = player_on_ladder
 local is_climbing_off_ladder = player_climbing_off_ladder
+local is_climbing_onto_ladder_from_top = player_climbing_onto_ladder_from_top
 local get_item_group = minetest.get_item_group
 
 -- avoids table look ups
@@ -42,8 +43,12 @@ local ladder_stand_end = 270
 local ladder_climb_off_begin = 275
 local ladder_climb_off_end = 295
 
+local ladder_climb_on_from_top_begin = 300
+local ladder_climb_on_from_top_end = 320
+
 --[[
     current_animation:
+    10 - climbing onto ladder from top
     9 - climbing off ladder
     8 - standing on ladder
     7 - climbing a ladder
@@ -144,8 +149,6 @@ minetest.register_entity(":player_holding_item", {
             self.set_item(self,item)
         end
 
-        --wield_item:set_attach(model,"Arm_Right", {x=0,y=6,z=1}, {x=90,y=0,z=-90}, true)
-
         -- allow player to aim down gun sights
         if (self.gun) then
             local player_aiming = player_is_aiming(get_player_by_name(self.attached_player))
@@ -192,7 +195,14 @@ minetest.register_entity(":player_model",{
         -- digest player look pitch - goes first to always function
         self.object:set_bone_position("Head",{x = 0, y = 6.25, z = 0}, {x = player:get_look_vertical() * -45, y = 0, z = 0})
 
-
+        -- this blocks the entire function to complete this animation
+        if (is_climbing_onto_ladder_from_top(self.attached_player)) then
+            if (self.current_animation ~= 10) then
+                self.object:set_animation({ x = ladder_climb_on_from_top_begin, y = ladder_climb_on_from_top_end }, 23, 0, false)
+                self.current_animation = 10
+            end
+            return
+        end
         -- this blocks the entire function to complete this animation
         if (is_climbing_off_ladder(self.attached_player)) then
             if (self.current_animation ~= 9) then

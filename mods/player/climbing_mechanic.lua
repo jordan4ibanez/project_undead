@@ -44,6 +44,11 @@ function player_climbing_off_ladder(player_name)
     return event ~= nil and event.type == "climb_off_ladder"
 end
 
+function player_climbing_onto_ladder_from_top(player_name)
+    local event = climb_event[player_name]
+    return event ~= nil and event.type == "onto_ladder_from_top"
+end
+
 local function get_ladder_climbing_controls(player)
     local control_bits = player:get_player_control_bits()
 
@@ -117,6 +122,29 @@ register_globalstep(function(dtime)
                 end
             elseif (event.type == "up_ladder" or event.type == "down_ladder") then
 
+                player:set_look_horizontal(event.yaw)
+
+                --stop player from moving around
+                local velocity = player:get_velocity()
+                player:add_velocity({ x = -velocity.x / 2, y = -velocity.y / 2, z = -velocity.z / 2})
+
+                event.timer = event.timer + dtime
+
+                -- do animation
+                if (vector_distance(player_pos, event.end_pos) > 0.15 and event.timer < 1) then
+
+                    local direction = vector_direction(player_pos, event.end_pos)
+
+                    direction = vector_multiply(direction, dtime * 2)
+
+                    player:set_pos(vector_add(player_pos,direction))
+                    -- return to normal
+                else
+                    player:set_pos(event.end_pos)
+                    event.timer = 0
+                    event.type = "on_ladder"
+                end
+            elseif (event.type == "onto_ladder_from_top") then
                 player:set_look_horizontal(event.yaw)
 
                 --stop player from moving around
@@ -384,10 +412,11 @@ register_globalstep(function(dtime)
                     --initialize climbing down ladder
                     if (get_item_group(get_node(pos).name, "ladder") > 0) then
                         --make sure there are at least 2 ladder segments
-                        if (get_item_group(get_node(vector_add(pos, { x = 0, y = -1, z = 0})).name, "ladder") > 0) then
+                        pos.y = pos.y - 1
+                        if (get_item_group(get_node(pos).name, "ladder") > 0) then
                             local finalized_pos = pos
                             local ladder_dir = facedir_to_dir(get_node(pos).param2)
-                            climb_event[name] = {type = "down_ladder", end_pos = finalized_pos, timer = 0, yaw = dir_to_yaw(ladder_dir), dir = ladder_dir}
+                            climb_event[name] = {type = "onto_ladder_from_top", end_pos = finalized_pos, timer = 0, yaw = dir_to_yaw(ladder_dir), dir = ladder_dir}
                             player:set_physics_override({speed = 0, gravity = 0})
                         end
                     end
