@@ -9,9 +9,6 @@ local stand_end = 20
 local sit_begin = 25
 local sit_end = 45
 
-local lay_begin = 200
-local lay_end = 220
-
 local walk_begin = 50
 local walk_end = 70
 
@@ -29,6 +26,9 @@ local aim_walk_end = 170
 
 local climb_over_begin = 175
 local climb_over_end = 195
+
+local lay_begin = 200
+local lay_end = 220
 
 --[[
     current_animation:
@@ -132,7 +132,7 @@ minetest.register_entity(":player_holding_item", {
             local player_aiming = player_is_aiming(get_player_by_name(self.attached_player))
             if (player_aiming and not self.aim_adjusted) then
                 local attached,_ = self.object:get_attach()
-                self.object:set_attach(attached,"Arm_Right", {x=0.5,y=6,z=1}, {x=85,y=0,z=-70}, true)
+                self.object:set_attach(attached,"Arm_Right", {x=0.5,y=6,z=1}, {x=90,y=0,z=-75}, true)
                 self.aim_adjusted = true
             elseif (not player_aiming and self.aim_adjusted) then
                 local attached,_ = self.object:get_attach()
