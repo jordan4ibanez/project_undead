@@ -66,7 +66,7 @@ minetest.register_entity(":player_holding_item", {
         visual           = "wielditem",
         physical         = false,
         textures         = {""},
-        is_visible       = true,
+        is_visible       = false,
         pointable        = false,
         collide_with_objects = false,
         collisionbox = {0, 0, 0, 0, 0, 0},
