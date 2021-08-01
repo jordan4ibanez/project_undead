@@ -1,5 +1,7 @@
 local get_player_by_name = minetest.get_player_by_name
-local is_climbing = player_climbing_over
+local is_climbing_over = player_climbing_over
+local is_climbing_ladder = player_climbing_ladder
+local is_on_ladder = player_on_ladder
 local get_item_group = minetest.get_item_group
 
 -- avoids table look ups
@@ -30,8 +32,16 @@ local climb_over_end = 195
 local lay_begin = 200
 local lay_end = 220
 
+local ladder_climb_begin = 225
+local ladder_climb_end = 245
+
+local ladder_stand_begin = 250
+local ladder_stand_end = 270
+
 --[[
     current_animation:
+    8 - standing on ladder
+    7 - climbing a ladder
     6 - holding gun walking
     5 - holding gun
     4 - climbing over
@@ -174,8 +184,29 @@ minetest.register_entity(":player_model",{
             return
         end
 
+        -- digest player look pitch - goes first to always function
+        self.object:set_bone_position("Head",{x = 0, y = 6.25, z = 0}, {x = player:get_look_vertical() * -45, y = 0, z = 0})
+
+        -- this blocks the entire function to hold the animation
+        if (is_on_ladder(self.attached_player)) then
+            if (self.current_animation ~= 8) then
+                self.object:set_animation({ x = ladder_stand_begin, y = ladder_stand_end }, 28, 0, true)
+                self.current_animation = 8
+            end
+            return
+        end
+
+        -- this blocks the entire function to hold the animation
+        if (is_climbing_ladder(self.attached_player)) then
+            if (self.current_animation ~= 7) then
+                self.object:set_animation({ x = ladder_climb_begin, y = ladder_climb_end }, 28, 0, true)
+                self.current_animation = 7
+            end
+            return
+        end
+
         -- this blocks the entire function to complete the animation
-        if (is_climbing(self.attached_player)) then
+        if (is_climbing_over(self.attached_player)) then
             if (self.current_animation ~= 4) then
                 self.object:set_animation({ x = climb_over_begin, y = climb_over_end }, 28, 0, false)
                 self.current_animation = 4
@@ -212,7 +243,6 @@ minetest.register_entity(":player_model",{
             control_bits = control_bits - 128
             hitting = true
         end
-
         -- sneak
         if (control_bits >= 64) then
             control_bits = control_bits - 64
@@ -276,9 +306,6 @@ minetest.register_entity(":player_model",{
             self.object:set_animation({ x = stand_begin, y = stand_end }, 20, 0, true)
             self.current_animation = 0
         end
-
-        -- digest player look pitch
-        self.object:set_bone_position("Head",{x = 0, y = 6.25, z = 0}, {x = player:get_look_vertical() * -45, y = 0, z = 0})
 
 
         -- digest player pitch when aiming to move arms
