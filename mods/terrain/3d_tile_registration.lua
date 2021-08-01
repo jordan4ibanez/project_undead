@@ -84,7 +84,6 @@ register_tile({
             32
         },
     }
-
 })
 
 
@@ -136,7 +135,6 @@ register_tile({
             32
         },
     }
-
 })
 
 register_tile({
@@ -545,4 +543,65 @@ register_tile({
 register_tile({
     name = "outer_wall_yellow",
     all_texture = "outer_wall_yellow.png"
+})
+
+register_tile({
+    name = "ladder",
+    front_texture = "ladder.png",
+    back_texture = "ladder.png",
+
+    left_texture = "ladder.png",
+    right_texture = "ladder.png",
+
+    top_texture = "ladder_top.png",
+    bottom_texture = "ladder_top.png^[transformFY",
+
+
+    pixel_box_texture_size = 32,
+    pixel_box = {
+        -- right side rail
+        {
+            0,
+            0,
+            0,
+
+            3,
+            32,
+            3
+        },
+
+        -- left side rail
+        {
+            29,
+            0,
+            0,
+
+            32,
+            32,
+            3
+        },
+
+        -- top rung
+        {
+            3,
+            7,
+            0,
+
+            29,
+            9,
+            2
+        },
+
+        -- bottom rung
+        {
+            3,
+            23,
+            0,
+
+            29,
+            25,
+            2
+        },
+    }
+
 })
