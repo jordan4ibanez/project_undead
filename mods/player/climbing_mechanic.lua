@@ -56,7 +56,7 @@ register_globalstep(function(dtime)
         else
 
             -- a cache happy way to intercept player controls
-            local initialize_climb_over = false
+            local initialize_climb = false
             local moving_forward = false
             local cancel_movement = false
 
@@ -90,11 +90,11 @@ register_globalstep(function(dtime)
             -- jump
             if (control_bits >= 16) then
                 control_bits = control_bits - 16
-                initialize_climb_over = true
+                initialize_climb = true
             end
 
             -- poll to see if player is set up to climb over something
-            if (initialize_climb_over) then
+            if (initialize_climb) then
                 -- right
                 if (control_bits >= 8) then
                     control_bits = control_bits - 8
