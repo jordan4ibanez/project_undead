@@ -21,11 +21,11 @@ local hit_end = 120
 local walk_hit_begin = 75
 local walk_hit_end = 95
 
-local aim_begin = 0
-local aim_end = 0
+local aim_begin = 125
+local aim_end = 145
 
-local aim_walk_begin = 0
-local aim_walk_end = 0
+local aim_walk_begin = 150
+local aim_walk_end = 170
 
 local climb_over_begin = 235
 local climb_over_end = 255
@@ -76,6 +76,7 @@ minetest.register_entity(":player_holding_item", {
     itemstring = "",
     gun = false,
     aim_adjusted = false,
+    was_aiming = false,
     set_item = function(self, item)
         if (self.itemstring == item) then
             return
@@ -252,7 +253,6 @@ minetest.register_entity(":player_model",{
 
 
         -- digest booleans and do animation
-
         if (aiming and moving and self.current_animation ~= 6) then
             self.object:set_animation({ x = aim_walk_begin, y = aim_walk_end }, 20, 0, true)
             self.current_animation = 6
@@ -275,7 +275,20 @@ minetest.register_entity(":player_model",{
 
         -- digest player look pitch
         self.object:set_bone_position("Head",{x = 0, y = 6.25, z = 0}, {x = player:get_look_vertical() * -45, y = 0, z = 0})
-        
+
+
+        -- digest player pitch when aiming to move arms
+        if (aiming) then
+            self.object:set_bone_position("Arm_Left_Base",{x = 0, y = 5.25, z = -1.5}, {x = player:get_look_vertical() * -50, y = 0, z = 0})
+            self.object:set_bone_position("Arm_Right_Base",{x = 0, y = 5.25, z = -1.5}, {x = player:get_look_vertical() * -50, y = 0, z = 0})
+            self.was_aiming = true
+        elseif (self.was_aiming) then
+            self.object:set_bone_position("Arm_Left_Base",{x = 0, y = 5.25, z = 0}, {x = 0, y = 0, z = 0})
+            self.object:set_bone_position("Arm_Right_Base",{x = 0, y = 5.25, z = 0}, {x = 0, y = 0, z = 0})
+            self.was_aiming = false
+        end
+
+
         -- crouching needs an animation
         --[[
         if (crouching) then
