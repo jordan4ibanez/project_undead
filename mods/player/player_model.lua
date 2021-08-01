@@ -78,6 +78,9 @@ minetest.register_entity(":player_holding_item", {
     aim_adjusted = false,
     was_aiming = false,
     set_item = function(self, item)
+
+        local visible = (item ~= "")
+
         if (self.itemstring == item) then
             return
         end
@@ -96,6 +99,7 @@ minetest.register_entity(":player_holding_item", {
             textures = {item_texture},
             wield_item = self.itemstring,
             visual_size  = {x = scale_x, y = scale_y, z = scale_z},
+            is_visible = visible,
         })
 
         self.gun = get_item_group(item, "gun") > 0
