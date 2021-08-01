@@ -12,8 +12,8 @@ local sit_end = 45
 local lay_begin = 162
 local lay_end = 167
 
-local walk_begin = 168
-local walk_end = 188
+local walk_begin = 50
+local walk_end = 70
 
 local hit_begin = 189
 local hit_end = 199
