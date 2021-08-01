@@ -27,8 +27,8 @@ local aim_end = 145
 local aim_walk_begin = 150
 local aim_walk_end = 170
 
-local climb_over_begin = 235
-local climb_over_end = 255
+local climb_over_begin = 175
+local climb_over_end = 195
 
 --[[
     current_animation:
