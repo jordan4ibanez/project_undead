@@ -556,6 +556,7 @@ register_tile({
     top_texture = "ladder_top.png",
     bottom_texture = "ladder_top.png^[transformFY",
 
+    ladder = true,
 
     pixel_box_texture_size = 32,
     pixel_box = {
