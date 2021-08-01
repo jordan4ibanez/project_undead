@@ -24,10 +24,12 @@ local function floor(pos)
     return vector_floor(vector_add(pos, 0.5))
 end
 
-function player_in_climb_event(player_name)
+function player_climbing_over(player_name)
     local event = climb_event[player_name]
     return event ~= nil and event.type == "climb_over"
 end
+
+
 
 local function get_ladder_climbing_controls(player)
     local control_bits = player:get_player_control_bits()

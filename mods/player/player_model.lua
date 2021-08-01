@@ -1,5 +1,5 @@
 local get_player_by_name = minetest.get_player_by_name
-local is_climbing = player_in_climb_event
+local is_climbing = player_climbing_over
 local get_item_group = minetest.get_item_group
 
 -- avoids table look ups
