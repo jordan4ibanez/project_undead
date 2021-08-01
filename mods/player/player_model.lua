@@ -2,6 +2,7 @@ local get_player_by_name = minetest.get_player_by_name
 local is_climbing_over = player_climbing_over
 local is_climbing_ladder = player_climbing_ladder
 local is_on_ladder = player_on_ladder
+local is_climbing_off_ladder = player_climbing_off_ladder
 local get_item_group = minetest.get_item_group
 
 -- avoids table look ups
@@ -38,8 +39,12 @@ local ladder_climb_end = 245
 local ladder_stand_begin = 250
 local ladder_stand_end = 270
 
+local ladder_climb_off_begin = 275
+local ladder_climb_off_end = 295
+
 --[[
     current_animation:
+    9 - climbing off ladder
     8 - standing on ladder
     7 - climbing a ladder
     6 - holding gun walking
@@ -186,6 +191,16 @@ minetest.register_entity(":player_model",{
 
         -- digest player look pitch - goes first to always function
         self.object:set_bone_position("Head",{x = 0, y = 6.25, z = 0}, {x = player:get_look_vertical() * -45, y = 0, z = 0})
+
+
+        -- this blocks the entire function to complete this animation
+        if (is_climbing_off_ladder(self.attached_player)) then
+            if (self.current_animation ~= 9) then
+                self.object:set_animation({ x = ladder_climb_off_begin, y = ladder_climb_off_end }, 28, 0, true)
+                self.current_animation = 9
+            end
+            return
+        end
 
         -- this blocks the entire function to hold the animation
         if (is_on_ladder(self.attached_player)) then

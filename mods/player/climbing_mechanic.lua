@@ -39,6 +39,11 @@ function player_on_ladder(player_name)
     return event ~= nil and event.type == "on_ladder"
 end
 
+function player_climbing_off_ladder(player_name)
+    local event = climb_event[player_name]
+    return event ~= nil and event.type == "climb_off_ladder"
+end
+
 local function get_ladder_climbing_controls(player)
     local control_bits = player:get_player_control_bits()
 
