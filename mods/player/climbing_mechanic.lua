@@ -132,14 +132,18 @@ register_globalstep(function(dtime)
                     local climb_over_able = false
                     local inside = false
 
+                    local tile_inside_name = get_node(pos).name
+                    local tile_front_name = get_node(tile_pos).name
+
                     -- allow for being inside the tile
-                    if (get_item_group(get_node(pos).name, "climb_over") > 0) then
+                    if (get_item_group(tile_inside_name, "climb_over") > 0) then
                         climb_over_able = true
                         inside = true
-                    elseif (get_item_group(get_node(tile_pos).name, "climb_over") > 0) then
+                    elseif (get_item_group(tile_front_name, "climb_over") > 0) then
                         climb_over_able = true
                     end
 
+                    -- climb over
                     -- begin check to see if viable to climb over at all
                     if (climb_over_able) then
 
