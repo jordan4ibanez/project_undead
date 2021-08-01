@@ -167,70 +167,6 @@ register_globalstep(function(dtime)
                     event.timer = 0
                     event.type = "on_ladder"
                 end
-
-            elseif (event.type == "on_ladder") then
-
-                player:set_look_horizontal(event.yaw)
-
-                --stop player from moving around
-                player:set_pos(event.end_pos)
-                local velocity = player:get_velocity()
-                player:add_velocity({ x = -velocity.x, y = -velocity.y, z = -velocity.z})
-
-                local ladder_control_bit = get_ladder_climbing_controls(player)
-
-                -- if a player is pressing space
-                if (ladder_control_bit == 1) then
-
-                    local tile = get_node({x = event.end_pos.x, y = event.end_pos.y + 1, z = event.end_pos.z}).name
-                    local tile_above = get_node({x = event.end_pos.x, y = event.end_pos.y + 2, z = event.end_pos.z}).name
-
-                    local tile_group = get_item_group(tile, "ladder") > 0
-                    local tile_above_group = get_item_group(tile_above, "ladder") > 0
-
-                    -- continue climbing the ladder
-                    if (tile_group and tile_above_group) then
-                        event.end_pos.y = event.end_pos.y + 1
-                        event.type = "up_ladder"
-                    -- get player off the ladder - climbing off event
-                    elseif (tile_group and not tile_above_group) then
-                        -- check if non-air in front of ladder
-                        local in_front_pos = vector_add(event.end_pos, event.dir)
-
-                        -- relocate it to where the player's model's hands are
-                        in_front_pos.y = in_front_pos.y + 1
-
-                        if (get_node(in_front_pos).name ~= "air") then
-                            -- check if space on top of non-air tile
-                            in_front_pos.y = in_front_pos.y + 1
-                            if (get_node(in_front_pos).name == "air") then
-                                -- check if enough room for player
-                                in_front_pos.y = in_front_pos.y + 1
-                                if (get_node(in_front_pos).name == "air") then
-                                    -- initialize climbing off event
-                                    in_front_pos.y = in_front_pos.y - 1
-                                    event.end_pos = in_front_pos
-                                    event.type = "climb_off_ladder"
-                                    event.timer = 0
-                                end
-                            end
-                        end
-                    end
-                -- if a player is pressing shift
-                elseif (ladder_control_bit == -1) then
-
-                    local tile = get_node({x = event.end_pos.x, y = event.end_pos.y - 1, z = event.end_pos.z}).name
-                    -- check if getting off ladder
-                    if (get_item_group(tile, "ladder") > 0) then
-                        event.end_pos.y = event.end_pos.y - 1
-                        event.type = "down_ladder"
-                    -- get off the ladder - don't allow players to fall
-                    elseif (tile ~= "air") then
-                        player:set_physics_override({speed = 1,gravity = 10})
-                        climb_event[name] = nil
-                    end
-
-                end
             elseif (event.type == "climb_off_ladder") then
 
                 --stop player from moving around
@@ -257,6 +193,71 @@ register_globalstep(function(dtime)
                 end
             end
 
+
+            if (event.type == "on_ladder") then
+
+                player:set_look_horizontal(event.yaw)
+
+                --stop player from moving around
+                player:set_pos(event.end_pos)
+                local velocity = player:get_velocity()
+                player:add_velocity({ x = -velocity.x, y = -velocity.y, z = -velocity.z})
+
+                local ladder_control_bit = get_ladder_climbing_controls(player)
+
+                -- if a player is pressing space
+                if (ladder_control_bit == 1) then
+
+                    local tile = get_node({x = event.end_pos.x, y = event.end_pos.y + 1, z = event.end_pos.z}).name
+                    local tile_above = get_node({x = event.end_pos.x, y = event.end_pos.y + 2, z = event.end_pos.z}).name
+
+                    local tile_group = get_item_group(tile, "ladder") > 0
+                    local tile_above_group = get_item_group(tile_above, "ladder") > 0
+
+                    -- continue climbing the ladder
+                    if (tile_group and tile_above_group) then
+                        event.end_pos.y = event.end_pos.y + 1
+                        event.type = "up_ladder"
+                        -- get player off the ladder - climbing off event
+                    elseif (tile_group and not tile_above_group) then
+                        -- check if non-air in front of ladder
+                        local in_front_pos = vector_add(event.end_pos, event.dir)
+
+                        -- relocate it to where the player's model's hands are
+                        in_front_pos.y = in_front_pos.y + 1
+
+                        if (get_node(in_front_pos).name ~= "air") then
+                            -- check if space on top of non-air tile
+                            in_front_pos.y = in_front_pos.y + 1
+                            if (get_node(in_front_pos).name == "air") then
+                                -- check if enough room for player
+                                in_front_pos.y = in_front_pos.y + 1
+                                if (get_node(in_front_pos).name == "air") then
+                                    -- initialize climbing off event
+                                    in_front_pos.y = in_front_pos.y - 1
+                                    event.end_pos = in_front_pos
+                                    event.type = "climb_off_ladder"
+                                    event.timer = 0
+                                end
+                            end
+                        end
+                    end
+                    -- if a player is pressing shift
+                elseif (ladder_control_bit == -1) then
+
+                    local tile = get_node({x = event.end_pos.x, y = event.end_pos.y - 1, z = event.end_pos.z}).name
+                    -- check if getting off ladder
+                    if (get_item_group(tile, "ladder") > 0) then
+                        event.end_pos.y = event.end_pos.y - 1
+                        event.type = "down_ladder"
+                        -- get off the ladder - don't allow players to fall
+                    elseif (tile ~= "air") then
+                        player:set_physics_override({speed = 1,gravity = 10})
+                        climb_event[name] = nil
+                    end
+
+                end
+            end
         -- do climb scanning
         else
             -- a cache happy way to intercept player controls
