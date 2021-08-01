@@ -129,19 +129,19 @@ register_globalstep(function(dtime)
                     -- move the base position to the tile trying to climb over - assumption
                     local tile_pos = vector_add(pos, dir)
 
-                    local activated = false
+                    local climb_over_able = false
                     local inside = false
 
                     -- allow for being inside the tile
                     if (get_item_group(get_node(pos).name, "climb_over") > 0) then
-                        activated = true
+                        climb_over_able = true
                         inside = true
                     elseif (get_item_group(get_node(tile_pos).name, "climb_over") > 0) then
-                        activated = true
+                        climb_over_able = true
                     end
 
                     -- begin check to see if viable to climb over at all
-                    if (activated) then
+                    if (climb_over_able) then
 
                         local check_pos
 
