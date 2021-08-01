@@ -159,11 +159,16 @@ register_globalstep(function(dtime)
                     if (get_item_group(tile, "ladder") > 0) then
                         event.end_pos.y = event.end_pos.y + 1
                         event.type = "up_ladder"
-                    -- get player off the ladder
+                    -- get player off the ladder - climbing off event
                     else
                         -- check if non-air in front of ladder
-                        local in_front_pos = vector_add(event.end_pos, event.dir)
-                        if (get_node(in_front_pos).name ~= "") then
+                        print(dump(event.dir))
+
+                        local in_front_pos = vector_add(event.end_pos, vector_multiply(event.dir, 2))
+
+                        print(get_node(in_front_pos).name)
+
+                        if (get_node(in_front_pos).name ~= "air") then
                             -- check if space on top of non-air tile
                             in_front_pos.y = in_front_pos.y + 1
                             if (get_node(in_front_pos).name == "air") then
@@ -370,13 +375,15 @@ register_globalstep(function(dtime)
                 -- must have air above the ladder
                 if (get_node(pos).name == "air") then
                     pos.y = pos.y - 1
-
                     --initialize climbing down ladder
                     if (get_item_group(get_node(pos).name, "ladder") > 0) then
-                        local finalized_pos = pos
-                        local ladder_dir = facedir_to_dir(get_node(pos).param2)
-                        climb_event[name] = {type = "down_ladder", end_pos = finalized_pos, timer = 0, yaw = dir_to_yaw(ladder_dir), dir = ladder_dir}
-                        player:set_physics_override({speed = 0, gravity = 0})
+                        --make sure there are at least 2 ladder segments
+                        if (get_item_group(get_node(vector_add(pos, { x = 0, y = -1, z = 0})).name, "ladder") > 0) then
+                            local finalized_pos = pos
+                            local ladder_dir = facedir_to_dir(get_node(pos).param2)
+                            climb_event[name] = {type = "down_ladder", end_pos = finalized_pos, timer = 0, yaw = dir_to_yaw(ladder_dir), dir = ladder_dir}
+                            player:set_physics_override({speed = 0, gravity = 0})
+                        end
                     end
                 end
             end
