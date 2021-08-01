@@ -4,10 +4,10 @@ local get_item_group = minetest.get_item_group
 
 -- avoids table look ups
 local stand_begin = 0
-local stand_end = 80
+local stand_end = 20
 
-local sit_begin = 81
-local sit_end = 161
+local sit_begin = 25
+local sit_end = 45
 
 local lay_begin = 162
 local lay_end = 167
