@@ -9,8 +9,8 @@ local stand_end = 20
 local sit_begin = 25
 local sit_end = 45
 
-local lay_begin = 162
-local lay_end = 167
+local lay_begin = 200
+local lay_end = 220
 
 local walk_begin = 50
 local walk_end = 70
