@@ -106,8 +106,8 @@ register_globalstep(function(dtime)
                 event.timer = event.timer + dtime
 
                 --stop player from moving around
-                local velocity = player:get_velocity()
-                player:add_velocity({ x = -velocity.x / 2, y = -velocity.y / 2, z = -velocity.z / 2})
+                --local velocity = player:get_velocity()
+                --player:add_velocity({ x = -velocity.x / 2, y = -velocity.y / 2, z = -velocity.z / 2})
 
                 -- do animation
                 if (vector_distance(player_pos, event.end_pos) > 0.15 and event.timer < 1) then
@@ -125,8 +125,8 @@ register_globalstep(function(dtime)
                 player:set_look_horizontal(event.yaw)
 
                 --stop player from moving around
-                local velocity = player:get_velocity()
-                player:add_velocity({ x = -velocity.x / 2, y = -velocity.y / 2, z = -velocity.z / 2})
+                --local velocity = player:get_velocity()
+                --player:add_velocity({ x = -velocity.x / 2, y = -velocity.y / 2, z = -velocity.z / 2})
 
                 event.timer = event.timer + dtime
 
@@ -148,8 +148,8 @@ register_globalstep(function(dtime)
                 player:set_look_horizontal(event.yaw)
 
                 --stop player from moving around
-                local velocity = player:get_velocity()
-                player:add_velocity({ x = -velocity.x / 2, y = -velocity.y / 2, z = -velocity.z / 2})
+                --local velocity = player:get_velocity()
+                --player:add_velocity({ x = -velocity.x / 2, y = -velocity.y / 2, z = -velocity.z / 2})
 
                 event.timer = event.timer + dtime
 
@@ -173,8 +173,9 @@ register_globalstep(function(dtime)
                 player:set_look_horizontal(event.yaw)
 
                 --stop player from moving around
-                local velocity = player:get_velocity()
-                player:add_velocity({ x = -velocity.x / 2, y = -velocity.y / 2, z = -velocity.z / 2})
+                player:set_pos(event.end_pos)
+                --local velocity = player:get_velocity()
+                --player:add_velocity({ x = -velocity.x / 2, y = -velocity.y / 2, z = -velocity.z / 2})
 
                 local ladder_control_bit = get_ladder_climbing_controls(player)
 
@@ -233,8 +234,8 @@ register_globalstep(function(dtime)
             elseif (event.type == "climb_off_ladder") then
 
                 --stop player from moving around
-                local velocity = player:get_velocity()
-                player:add_velocity({ x = -velocity.x / 2, y = -velocity.y / 2, z = -velocity.z / 2})
+                --local velocity = player:get_velocity()
+                --player:add_velocity({ x = -velocity.x / 2, y = -velocity.y / 2, z = -velocity.z / 2})
 
                 player:set_look_horizontal(event.yaw)
 
