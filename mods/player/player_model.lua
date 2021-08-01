@@ -15,17 +15,17 @@ local lay_end = 167
 local walk_begin = 50
 local walk_end = 70
 
-local hit_begin = 189
-local hit_end = 199
+local hit_begin = 100
+local hit_end = 120
 
-local walk_hit_begin = 200
-local walk_hit_end = 220
+local walk_hit_begin = 75
+local walk_hit_end = 95
 
-local aim_begin = 221
-local aim_end = 221
+local aim_begin = 0
+local aim_end = 0
 
-local aim_walk_begin = 222
-local aim_walk_end = 234
+local aim_walk_begin = 0
+local aim_walk_end = 0
 
 local climb_over_begin = 235
 local climb_over_end = 255
