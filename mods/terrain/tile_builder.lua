@@ -162,6 +162,10 @@ function register_tile(def)
         groups.climb_over = 1
     end
 
+    if (def.ladder) then
+        groups.ladder = 1
+    end
+
 
     -- disable fall damage
     groups.fall_damage_add_percent = -100
