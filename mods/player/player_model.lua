@@ -59,11 +59,27 @@ local backpack_grab_stage_2_end = 370
 -- backpack is now presented in players view
 -- these animations are reversed when putting away backpack
 
+local backpack_stand_begin = 370
+local backpack_stand_end = 370
+
+local backpack_walk_begin = 375
+local backpack_walk_end = 395
+
+local backpack_put_away_stage_1_begin = 400
+local backpack_put_away_stage_1_end = 420
+
+local backpack_put_away_stage_2_begin = 425
+local backpack_put_away_stage_2_end = 445
+
 -- end backpack animations
 
 
 --[[
     current_animation:
+    16 - putting away backpack - stage 2
+    15 - putting away backpack - stage 1
+    14 - standing with backpack
+    13 - walking with backpack
     12 - grabbing backpack - stage 2
     11 - grabbing backpack - stage 1
     10 - climbing onto ladder from top
@@ -80,6 +96,61 @@ local backpack_grab_stage_2_end = 370
 ]]--
 
 local models = {}
+
+local function is_moving_with_backpack(player)
+    local control_bits = player:get_player_control_bits()
+
+    -- zoom
+    if (control_bits >= 512) then
+        control_bits = control_bits - 512
+    end
+
+    -- place
+    if (control_bits >= 256) then
+        control_bits = control_bits - 256
+    end
+
+    -- dig
+    if (control_bits >= 128) then
+        control_bits = control_bits - 128
+    end
+    -- sneak
+    if (control_bits >= 64) then
+        control_bits = control_bits - 64
+    end
+
+    -- aux1
+    if (control_bits >= 32) then
+        control_bits = control_bits - 32
+    end
+
+    -- jump
+    if (control_bits >= 16) then
+        control_bits = control_bits - 16
+    end
+
+    -- right
+    if (control_bits >= 8) then
+        return(true)
+    end
+
+    -- left
+    if (control_bits >= 4) then
+        return(true)
+    end
+
+    -- down
+    if (control_bits >= 2) then
+        return(true)
+    end
+
+    -- up
+    if (control_bits >= 1) then
+        return(true)
+    end
+
+    return(false)
+end
 
 local function player_is_aiming(player)
     local control_bits = player:get_player_control_bits()
@@ -205,24 +276,21 @@ minetest.register_entity(":backpack", {
     },
     attached_player = nil,
     timer = 0,
-    set_visibility = function(self, visibility)
-        self.object:set_properties({is_visible = visibility})
-    end,
-
-    open = function(self)
+    set_opened = function(self, opened)
+        local status = ""
+        if (opened) then
+            status = "open_backpack"
+        else
+            status = "backpack"
+        end
         self.object:set_properties({
-            textures = {"open_backpack"},
-        })
-    end,
-
-    close = function(self)
-        self.object:set_properties({
-            textures = {"open_backpack"},
+            textures = {status},
         })
     end,
     on_step = function(self,dtime)
         self.timer = self.timer + dtime
         if (self.timer > 0.25) then
+            self.timer = 0
             if (self.attached_player == nil) then
                 self.object:remove()
                 return
@@ -259,6 +327,46 @@ minetest.register_entity(":player_model",{
 
         -- digest player look pitch - goes first to always function
         self.object:set_bone_position("Head",{x = 0, y = 6.25, z = 0}, {x = player:get_look_vertical() * -45, y = 0, z = 0})
+
+        -- this blocks the entire function to complete this animation
+        local backpack_event = get_player_backpack_event(self.attached_player)
+        if (backpack_event) then
+            if (backpack_event == 1) then
+                if (self.current_animation ~= 11) then
+                    self.object:set_animation({ x = backpack_grab_stage_1_begin, y = backpack_grab_stage_1_end }, 23, 0, false)
+                    self.current_animation = 11
+                end
+            elseif (backpack_event == 2) then
+                if (self.current_animation ~= 12) then
+                    self.object:set_animation({ x = backpack_grab_stage_2_begin, y = backpack_grab_stage_2_end }, 23, 0, false)
+                    self.current_animation = 12
+                end
+            elseif (backpack_event == 3) then
+                if (is_moving_with_backpack(player)) then
+                    if (self.current_animation ~= 13) then
+                        self.object:set_animation({ x = backpack_walk_begin, y = backpack_walk_end }, 20, 0, true)
+                        self.current_animation = 13
+                    end
+                else
+                    if (self.current_animation ~= 14) then
+                        self.object:set_animation({ x = backpack_stand_begin, y = backpack_stand_end }, 20, 0, false)
+                        self.current_animation = 14
+                    end
+                end
+            elseif (backpack_event == 4) then
+                if (self.current_animation ~= 15) then
+                    self.object:set_animation({ x = backpack_put_away_stage_1_begin, y = backpack_put_away_stage_1_end }, 20, 0, false)
+                    self.current_animation = 15
+                end
+            elseif(backpack_event == 5) then
+                if (self.current_animation ~= 16) then
+                    self.object:set_animation({ x = backpack_put_away_stage_2_begin, y = backpack_put_away_stage_2_end }, 20, 0, false)
+                    self.current_animation = 16
+                end
+            end
+            return
+        end
+
 
         -- this blocks the entire function to complete this animation
         if (is_climbing_onto_ladder_from_top(self.attached_player)) then
@@ -433,6 +541,27 @@ function set_player_model_visibility(player,is_visible)
     models[name].model:set_properties({is_visible = is_visible})
 end
 
+function set_player_backpack_visibility(player,is_visible)
+    local name = player:get_player_name()
+    models[name].backpack:set_properties({is_visible = is_visible})
+end
+
+function attach_player_backpack_to_hand(player)
+    local name = player:get_player_name()
+    models[name].backpack:set_attach(models[name].model,"Arm_Right", {x=3,y=4.4,z=0}, {x=90,y=0,z=180}, true)
+end
+
+function reattach_player_backpack_to_back(player)
+    local name = player:get_player_name()
+    models[name].backpack:set_attach(models[name].model,"Body", {x=0,y=5,z=6.1}, {x=0,y=180,z=0}, true)
+end
+
+function set_player_backpack_opened(player, opened)
+    local name = player:get_player_name()
+    models[name].backpack:get_luaentity():set_opened(opened)
+end
+
+
 minetest.register_on_joinplayer(function(player)
     --removes the 2D green guy
     player:set_properties({
@@ -454,7 +583,7 @@ minetest.register_on_joinplayer(function(player)
     local backpack_model = minetest.add_entity(player:get_pos(), "backpack")
     backpack_model:get_luaentity().attached_player = name
     backpack_model:set_attach(model,"Body", {x=0,y=5,z=6.1}, {x=0,y=180,z=0}, true)
-    backpack_model:get_luaentity():set_visibility(true)
+    --backpack_model:get_luaentity():set_visibility(true)
 
     models[name] = {wield_item = wield_item, model = model, backpack = backpack_model}
 end)
