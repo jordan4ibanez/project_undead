@@ -171,6 +171,53 @@ minetest.register_entity(":player_holding_item", {
 })
 
 
+minetest.register_entity(":backpack", {
+    initial_properties = {
+        hp_max           = 1,
+        visual           = "wielditem",
+        physical         = false,
+        textures         = {"backpack"},
+        is_visible       = false,
+        pointable        = false,
+        collide_with_objects = false,
+        collisionbox = {0, 0, 0, 0, 0, 0},
+        selectionbox = {0, 0, 0, 0, 0, 0},
+        -- this should be 1/1.1 but that does not work properly
+        visual_size  = {x = 0.7, y = 0.7},
+    },
+    attached_player = nil,
+    timer = 0,
+    set_visibility = function(self, visibility)
+        self.object:set_properties({is_visible = visibility})
+    end,
+
+    open = function(self)
+        self.object:set_properties({
+            textures = {"open_backpack"},
+        })
+    end,
+
+    close = function(self)
+        self.object:set_properties({
+            textures = {"open_backpack"},
+        })
+    end,
+    on_step = function(self,dtime)
+        self.timer = self.timer + dtime
+        if (self.timer > 0.25) then
+            if (self.attached_player == nil) then
+                self.object:remove()
+                return
+            end
+            if (get_player_by_name(self.attached_player) == nil) then
+                self.object:remove()
+                return
+            end
+        end
+    end,
+})
+
+
 minetest.register_entity(":player_model",{
     visual = "mesh",
     mesh = "player.b3d",
@@ -385,5 +432,10 @@ minetest.register_on_joinplayer(function(player)
     wield_item:get_luaentity().attached_player = name
     wield_item:set_attach(model,"Arm_Right", {x=0,y=6,z=1}, {x=90,y=0,z=-90}, true)
 
-    models[name] = {wield_item = wield_item, model = model}
+    local backpack_model = minetest.add_entity(player:get_pos(), "backpack")
+    backpack_model:get_luaentity().attached_player = name
+    backpack_model:set_attach(model,"Body", {x=0,y=5,z=6.1}, {x=0,y=180,z=0}, true)
+    backpack_model:get_luaentity():set_visibility(true)
+
+    models[name] = {wield_item = wield_item, model = model, backpack = backpack_model}
 end)

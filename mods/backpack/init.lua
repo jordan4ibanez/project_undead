@@ -22,10 +22,10 @@ register_tile({
     }
 })
 
-
 register_tile({
     name = "open_backpack",
 
+    -- working with over 1x1 tile node boxes is difficult, so this is a hack
     top_texture = "backpack_open_top.png",
     bottom_texture = "backpack_open_bottom.png",
     front_texture = "backpack_side.png",
