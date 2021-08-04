@@ -46,8 +46,26 @@ local ladder_climb_off_end = 295
 local ladder_climb_on_from_top_begin = 300
 local ladder_climb_on_from_top_end = 320
 
+-- begin backpack animations
+
+local backpack_grab_stage_1_begin = 325
+local backpack_grab_stage_1_end = 345
+
+-- backpack becomes attached
+
+local backpack_grab_stage_2_begin = 350
+local backpack_grab_stage_2_end = 370
+
+-- backpack is now presented in players view
+-- these animations are reversed when putting away backpack
+
+-- end backpack animations
+
+
 --[[
     current_animation:
+    12 - grabbing backpack - stage 2
+    11 - grabbing backpack - stage 1
     10 - climbing onto ladder from top
     9 - climbing off ladder
     8 - standing on ladder
