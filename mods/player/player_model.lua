@@ -432,6 +432,7 @@ minetest.register_on_joinplayer(function(player)
     wield_item:get_luaentity().attached_player = name
     wield_item:set_attach(model,"Arm_Right", {x=0,y=6,z=1}, {x=90,y=0,z=-90}, true)
 
+    -- this is another attachment linkage to the player model entity
     local backpack_model = minetest.add_entity(player:get_pos(), "backpack")
     backpack_model:get_luaentity().attached_player = name
     backpack_model:set_attach(model,"Body", {x=0,y=5,z=6.1}, {x=0,y=180,z=0}, true)
