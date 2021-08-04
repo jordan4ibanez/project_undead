@@ -60,3 +60,28 @@ If you come to an obstacle in the way, say a barrier, sand bag, guard rail, low 
 to climb over it. You can not climb over everything, so plan your getaway accordingly.
 
 ---
+
+### API
+
+Minetest's engine has a built-in API. An Application Programming Interface. This is a bit of a misnomer as every game written
+using the default Minetest game engine needs to utilize this. The engine has no internal built in game.
+
+Project Undead has an API built on top of this API. "Man that sounds like a waste of time!", you are probably saying to yourself.
+This would be the case, if not for the special use-case that this project is utilizing the Minetest engine for. Where, most games
+in the Minetest engine, in fact, most mods in general, are expecting a procedurally generated environment. Environments with
+extensive unknown variables, heights, terrain, unknown interactions, mod conflicts, etc. In this game, it gets a lot easier for
+developers. 
+
+This game has an extreme advantage over the normal use-case. All variables, besides entities, are known. The terrain takes 
+a lot of effort to modify. Players are more focused on trying to survive vs exploiting the major mechanics and design flaws 
+of interoperating mods which require extensive boilerplate code to interfere with each other properly. Players are also instantly 
+kicked from the game if they utilize cheat clients to dig tiles.
+
+In Project Undead there are set variables that are designed to be as congruent as physically possible based on the limitations
+and strengths programmed into the Minetest engine. There are custom assets, mechanics, design choices that have never been implemented
+into any Minetest game in such a manor before. This allows the design of the engine to skip huge chunks of the internal Minetest
+API, allowing developers to roll out mods in a clean and simple manor.
+
+There are many custom functions and mechanics built into project undead. If you would like to take a look at the current API, 
+feel free to look through [API.MD](https://github.com/jordan4ibanez/project_undead/blob/main/API.MD) This may be outdated 
+slightly, as this is programmed and documented by one developer as it's created. 
