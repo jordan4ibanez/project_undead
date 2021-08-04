@@ -561,6 +561,10 @@ function set_player_backpack_opened(player, opened)
     models[name].backpack:get_luaentity():set_opened(opened)
 end
 
+function get_player_backpack_entity(player)
+    local name = player:get_player_name()
+    return models[name].backpack
+end
 
 minetest.register_on_joinplayer(function(player)
     --removes the 2D green guy

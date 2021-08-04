@@ -194,5 +194,5 @@ register_tile({
 
 ### add_item(pos, item_name)
 
-This is similar to minetest.add_item. The only exception is it adds a new, lighter weight item instead of the built in item
+This is similar to minetest.add_item. The only exception is it adds a new, lighter weight item instead of the built-in item
 entity.
