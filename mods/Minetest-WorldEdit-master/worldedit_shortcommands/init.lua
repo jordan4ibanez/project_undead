@@ -1,3 +1,8 @@
+if (not editor_mode) then
+	return
+end
+
+
 --provides shorter names for the commands in `worldedit_commands`
 
 worldedit.alias_command = function(alias, original)

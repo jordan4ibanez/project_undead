@@ -1,3 +1,8 @@
+if (not editor_mode) then
+	return
+end
+
+
 if minetest.raycast == nil then
 	error(
 		"worldedit_brush requires at least Minetest 5.0"

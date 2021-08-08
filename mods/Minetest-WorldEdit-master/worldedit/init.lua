@@ -1,3 +1,8 @@
+if (not editor_mode) then
+	return
+end
+
+
 --- WorldEdit mod for the Minetest engine
 -- @module worldedit
 -- @release 1.3

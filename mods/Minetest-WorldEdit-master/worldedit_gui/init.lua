@@ -1,3 +1,8 @@
+if (not editor_mode) then
+	return
+end
+
+
 worldedit = worldedit or {}
 
 --[[

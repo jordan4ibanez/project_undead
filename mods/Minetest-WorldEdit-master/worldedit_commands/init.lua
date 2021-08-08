@@ -1,3 +1,8 @@
+if (not editor_mode) then
+	return
+end
+
+
 minetest.register_privilege("worldedit", "Can use WorldEdit commands")
 
 worldedit.pos1 = {}

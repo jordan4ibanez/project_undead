@@ -1,3 +1,7 @@
+if (not editor_mode) then
+	return
+end
+
 -- sfinv/init.lua
 
 dofile(minetest.get_modpath("sfinv") .. "/api.lua")
