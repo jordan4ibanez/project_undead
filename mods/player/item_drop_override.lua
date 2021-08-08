@@ -15,12 +15,12 @@ function allocate_drop_button(func)
     function_tables[getn(function_tables) + 1] = func
 end
 
-
-
+-- these are debugging functions, used to verify the api element, also a good source for how to use it
+--[[
 allocate_drop_button(
-function(itemstack,player,pos)
-    print("wow this works")
-end
+        function(itemstack,player,pos)
+            print("wow this works")
+        end
 )
 
 
@@ -35,3 +35,4 @@ allocate_drop_button(
             print("this is a horrible workaround")
         end
 )
+]]--
