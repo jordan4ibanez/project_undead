@@ -1,6 +1,8 @@
 local getn = table.getn
-
--- modular item_drop overrides which frees up the Q key
+--[[
+modular item_drop overrides which frees up the Q key
+the only real problem with this: if a bunch of mods use this, it might lag
+]]--
 
 local function_tables = {}
 
