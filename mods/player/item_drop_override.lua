@@ -10,7 +10,7 @@ minetest.item_drop = function(itemstack, player, pos)
     for _,func in pairs(function_tables) do
         func(itemstack, player, pos)
     end
-    return nil
+    return(nil)
 end
 
 function allocate_drop_button(func)
