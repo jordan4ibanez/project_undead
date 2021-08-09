@@ -43,6 +43,24 @@ minetest.register_entity(":item", {
         })
     end,
 
+    on_punch = function(self, player)
+        -- check if player has free hand
+        local inventory = player:get_inventory()
+
+        local stack_1 = player:get_wielded_item():get_name()
+        local stack_2 = inventory:get_stack("secondary", 1):get_name()
+
+        if (stack_1 == "") then
+            player:set_wielded_item(self.itemstring)
+            self.object:remove()
+            return
+        elseif (stack_2 == "") then
+            inventory:set_stack("secondary", 1, self.itemstring)
+            self.object:remove()
+            return
+        end
+    end,
+
     -- when an item "goes to sleep"
     get_staticdata = function(self)
         return serialize({
