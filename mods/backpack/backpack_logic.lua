@@ -3,6 +3,7 @@ local register_globalstep = minetest.register_globalstep
 local serialize = minetest.serialize
 local deserialize = minetest.deserialize
 local is_player = minetest.is_player
+local mod_storage = minetest.get_mod_storage()
 local add_entity = minetest.add_entity
 local vector_multiply = vector.multiply
 
@@ -380,6 +381,7 @@ register_globalstep(function(dtime)
                     backpack_events[name] = nil
                     set_player_backpack_visibility(player, false)
                     player_backpacks[name] = nil
+                    mod_storage:set_string(name.."_backpack_data", "")
 
                     set_player_item_swap_cooldown(player, 0.5)
                 -- player wants to put backpack away
@@ -536,6 +538,8 @@ minetest.register_entity(":backpack_ground", {
 
             attach_player_backpack_to_hand(player)
 
+            mod_storage:set_string(name.."_backpack_data", serialize(player_backpacks[name]))
+
             self.object:remove()
         end
     end,
@@ -578,28 +582,34 @@ function player_has_backpack(player)
     return(player_backpacks[name] ~= nil)
 end
 
+
 minetest.register_on_joinplayer(function(player)
     local name = player:get_player_name()
-
-    -- this is a debug and needs to be loaded from a mod save file
-    --[[
-    if (not players_backpacks[name]) then
-        players_backpacks[name] = {
-            slot_1 = "",
-            slot_2 = "",
-            slot_3 = "",
-            slot_4 = "",
-            slot_5 = "",
-            slot_6 = "",
-            slot_7 = "",
-            slot_8 = "",
-            slot_9 = "",
-            slot_10 = ""
-        }
-
+    local serialized_data = mod_storage:get_string(name.."_backpack_data")
+    -- deserialize the player backpack data
+    if (serialized_data ~= "") then
+        local data = deserialize(serialized_data)
+        player_backpacks[name] = data
         minetest.after(0, function()
             set_player_backpack_visibility(player, true)
         end)
     end
-    ]]--
+end)
+
+minetest.register_on_leaveplayer(function(player)
+    local name = player:get_player_name()
+    if (player_backpacks[name]) then
+        mod_storage:set_string(name.."_backpack_data", serialize(player_backpacks[name]))
+        player_backpacks[name] = nil
+    else
+        mod_storage:set_string(name.."_backpack_data", "")
+    end
+end)
+
+
+minetest.register_on_shutdown(function()
+    for name,_ in pairs(player_backpacks) do
+        mod_storage:set_string(name.."_backpack_data", serialize(player_backpacks[name]))
+        player_backpacks[name] = nil
+    end
 end)
