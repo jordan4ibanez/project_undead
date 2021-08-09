@@ -222,6 +222,31 @@ local function get_if_player_reaching_for_backpack(player)
 end
 
 
+local function is_swapping_items_backpack(player)
+    local control_bits = player:get_player_control_bits()
+
+    local return_bit = 0
+
+    -- zoom
+    if (control_bits >= 512) then
+        control_bits = control_bits - 512
+    end
+
+    -- place
+    if (control_bits >= 256) then
+        control_bits = control_bits - 256
+        return_bit = return_bit - 1
+    end
+
+    -- dig
+    if (control_bits >= 128) then
+        control_bits = control_bits - 128
+        return_bit = return_bit + 1
+    end
+
+    return(return_bit)
+end
+
 register_globalstep(function(dtime)
     for _,player in pairs(get_connected_players()) do
 
@@ -232,7 +257,6 @@ register_globalstep(function(dtime)
         -- check to see if player is trying to get to their backpack
         if (not event) then
             if (get_if_player_reaching_for_backpack(player) and players_backpacks[name]) then
-                print("player is trying to reach for backpack")
                 backpack_events[name] = {stage = 1, timer = 0}
                 -- player is locked in place until they're holding their backpack
                 player:set_physics_override({speed = 0})
