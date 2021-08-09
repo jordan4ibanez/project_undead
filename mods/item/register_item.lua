@@ -22,7 +22,7 @@ function register_item(def)
         groups.scale_z = 0.2
     end
 
-    local on_place = nil
+    local on_place
     
     if (editor_mode) then
         on_place = function(itemstack, player, pointed_thing)
