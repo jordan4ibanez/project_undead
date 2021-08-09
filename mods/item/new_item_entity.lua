@@ -3,7 +3,7 @@ local add_entity = minetest.add_entity
 minetest.register_entity(":item", {
     initial_properties = {
         hp_max           = 1,
-        visual           = "sprite",
+        visual           = "wielditem",
         physical         = false,
         textures         = {""},
         is_visible       = true,
