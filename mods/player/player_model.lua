@@ -240,8 +240,9 @@ minetest.register_entity(":player_holding_item", {
 
         -- allow player to aim down gun sights
         if (self.gun) then
-            local player_aiming = player_is_aiming(get_player_by_name(self.attached_player))
-            if (player_aiming and not self.aim_adjusted and not player_has_backpack_open(get_player_by_name(self.attached_player))) then
+            local player = get_player_by_name(self.attached_player)
+            local player_aiming = player_is_aiming(player)
+            if (player_aiming and not self.aim_adjusted and not player_has_backpack_open(player) and not player_is_climbing(self.attached_player)) then
                 local attached,_ = self.object:get_attach()
                 self.object:set_attach(attached,"Arm_Right", {x=0.5,y=6,z=1}, {x=90,y=0,z=-75}, true)
                 self.aim_adjusted = true
@@ -660,9 +661,6 @@ minetest.register_on_joinplayer(function(player)
     local backpack_model = minetest.add_entity(player:get_pos(), "backpack")
     backpack_model:get_luaentity().attached_player = name
     backpack_model:set_attach(model,"Body", {x=0,y=5,z=6.1}, {x=0,y=180,z=0}, true)
-
-
-    --backpack_model:get_luaentity():set_visibility(true)
 
     models[name] = {wield_item = wield_item, secondary_wield_item = secondary_wield_item, model = model, backpack = backpack_model}
 end)
