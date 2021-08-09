@@ -1,11 +1,13 @@
 local get_connected_players = minetest.get_connected_players
 local register_globalstep = minetest.register_globalstep
+local serialize = minetest.serialize
+local deserialize = minetest.deserialize
 local is_player = minetest.is_player
 local add_entity = minetest.add_entity
 local vector_multiply = vector.multiply
 
 local backpack_events = {}
-local players_backpacks = {}
+local player_backpacks = {}
 
 
 local function add_backpack_gui_entity(pos,item_name)
@@ -79,7 +81,7 @@ minetest.register_entity(":backpack_gui_anchor_entity", {
     create_gui = function(self, player)
         self.owner = player
         local name = player:get_player_name()
-        local backpack_contents = players_backpacks[name]
+        local backpack_contents = player_backpacks[name]
         local pos = player:get_pos()
 
         local x = -2
@@ -117,7 +119,7 @@ minetest.register_entity(":backpack_gui_anchor_entity", {
     rebuild_slot = function(self,slot_number)
 
         local name = self.owner:get_player_name()
-        local backpack_contents = players_backpacks[name]
+        local backpack_contents = player_backpacks[name]
 
         local current_index = backpack_contents["slot_"..tostring(slot_number)]
 
@@ -260,6 +262,18 @@ local function get_if_player_reaching_for_backpack(player)
     return(false)
 end
 
+local function is_trying_to_drop_backpack(player)
+    local control_bits = player:get_player_control_bits()
+
+    -- zoom
+    if (control_bits >= 512) then
+        return(true)
+    end
+
+    return(false)
+end
+
+
 
 local function is_swapping_items_backpack(player)
     local control_bits = player:get_player_control_bits()
@@ -295,7 +309,7 @@ register_globalstep(function(dtime)
 
         -- check to see if player is trying to get to their backpack
         if (not event) then
-            if (get_if_player_reaching_for_backpack(player) and players_backpacks[name] and not player_is_climbing(name)) then
+            if (get_if_player_reaching_for_backpack(player) and player_backpacks[name] and not player_is_climbing(name)) then
                 backpack_events[name] = {stage = 1, timer = 0}
                 -- player is locked in place until they're holding their backpack
                 player:set_physics_override({speed = 0})
@@ -331,21 +345,43 @@ register_globalstep(function(dtime)
                 -- this is used to scroll the inventory properly, it is a hack
                 player:get_inventory():set_size("main", 10)
                 player:hud_set_hotbar_itemcount(10)
-
                 -- holding backpack in front of player
             elseif (event.stage == 3) then
-                -- poll Q (drop) for dropping a backpack on the ground
+                -- poll Z (zoom) for dropping a backpack on the ground
+                if (is_trying_to_drop_backpack(player) and not player_is_climbing(name) and backpack_events[name] and backpack_events[name].stage == 3) then
+                    local pos = player:get_pos()
+                    pos.y = pos.y + 0.5
+                    local backpack_entity = add_entity(pos, "backpack_ground")
 
-                -- the cool_down for swapping items in and out of the backpack
-                if (event.swap_cooldown) then
-                    event.swap_cooldown = event.swap_cooldown - dtime
-                    if (event.swap_cooldown <= 0) then
-                        event.swap_cooldown = nil
+                    if (backpack_entity and backpack_entity:get_luaentity()) then
+                        local lua_entity = backpack_entity:get_luaentity()
+
+                        backpack_entity:set_yaw(player:get_look_horizontal())
+
+                        local current_player_backpack = player_backpacks[name]
+
+                        lua_entity.slot_1 = current_player_backpack.slot_1
+                        lua_entity.slot_2 = current_player_backpack.slot_2
+                        lua_entity.slot_3 = current_player_backpack.slot_3
+                        lua_entity.slot_4 = current_player_backpack.slot_4
+                        lua_entity.slot_5 = current_player_backpack.slot_5
+                        lua_entity.slot_6 = current_player_backpack.slot_6
+                        lua_entity.slot_7 = current_player_backpack.slot_7
+                        lua_entity.slot_8 = current_player_backpack.slot_8
+                        lua_entity.slot_9 = current_player_backpack.slot_9
+                        lua_entity.slot_10 = current_player_backpack.slot_10
                     end
-                end
 
+                    -- delete backpack gui
+                    if (event.gui_entity and event.gui_entity:get_luaentity()) then
+                        event.gui_entity:get_luaentity():clean_up()
+                    end
+
+                    backpack_events[name] = nil
+                    set_player_backpack_visibility(player, false)
+                    player_backpacks[name] = nil
                 -- player wants to put backpack away
-                if (get_if_player_reaching_for_backpack(player)) then
+                elseif (get_if_player_reaching_for_backpack(player)) then
                     event.stage = 4
                     event.timer = 0
                     -- close backpack
@@ -378,10 +414,10 @@ register_globalstep(function(dtime)
                         local inventory = player:get_inventory()
 
                         local stack_1 = inventory:get_stack("main", 1):get_name()
-                        local stack_2 = players_backpacks[name]["slot_"..tostring(index)]
+                        local stack_2 = player_backpacks[name]["slot_"..tostring(index)]
 
                         inventory:set_stack("main", 1, stack_2)
-                        players_backpacks[name]["slot_"..tostring(index)] = stack_1
+                        player_backpacks[name]["slot_"..tostring(index)] = stack_1
 
                        event.gui_entity:get_luaentity():rebuild_slot(index)
 
@@ -392,14 +428,22 @@ register_globalstep(function(dtime)
                         local inventory = player:get_inventory()
 
                         local stack_1 = inventory:get_stack("secondary", 1):get_name()
-                        local stack_2 = players_backpacks[name]["slot_"..tostring(index)]
+                        local stack_2 = player_backpacks[name]["slot_"..tostring(index)]
 
                         inventory:set_stack("secondary", 1, stack_2)
-                        players_backpacks[name]["slot_"..tostring(index)] = stack_1
+                        player_backpacks[name]["slot_"..tostring(index)] = stack_1
 
                         event.gui_entity:get_luaentity():rebuild_slot(index)
 
                         event.swap_cooldown = 0.25
+                    end
+                end
+
+                -- the cool_down for swapping items in and out of the backpack
+                if (event.swap_cooldown) then
+                    event.swap_cooldown = event.swap_cooldown - dtime
+                    if (event.swap_cooldown <= 0) then
+                        event.swap_cooldown = nil
                     end
                 end
             elseif (event.stage == 4 and event.timer >= 0.8) then
@@ -422,12 +466,12 @@ minetest.register_entity(":backpack_ground", {
         hp_max           = 1,
         visual           = "wielditem",
         physical         = false,
-        textures         = {"backpack"},
-        is_visible       = false,
-        pointable        = false,
+        textures         = {"backpack_ground"},
+        is_visible       = true,
+        pointable        = true,
         collide_with_objects = false,
         collisionbox = {0, 0, 0, 0, 0, 0},
-        selectionbox = {0, 0, 0, 0, 0, 0},
+        selectionbox = {-0.3, -0.5, -0.3, 0.3, 0.5, 0.3},
         -- this should be 1/1.1 but that does not work properly
         visual_size  = {x = 0.7, y = 0.7},
     },
@@ -457,6 +501,41 @@ minetest.register_entity(":backpack_ground", {
             slot_9 = self.slot_9,
             slot_10 = self.slot_10,
         })
+    end,
+
+    on_punch = function(self, player)
+        local name = player:get_player_name()
+        -- player equips backpack and is in open event so they can put it back down quickly
+        if (not player_has_backpack(player)) then
+            player_backpacks[name] = {
+                slot_1 = self.slot_1,
+                slot_2 = self.slot_2,
+                slot_3 = self.slot_3,
+                slot_4 = self.slot_4,
+                slot_5 = self.slot_5,
+                slot_6 = self.slot_6,
+                slot_7 = self.slot_7,
+                slot_8 = self.slot_8,
+                slot_9 = self.slot_9,
+                slot_10 = self.slot_10,
+            }
+
+            set_player_backpack_visibility(player, true)
+
+            backpack_events[name] = {stage = 2, timer = 1}
+
+            local event = backpack_events[name]
+            -- stop instantly clicking
+            event.swap_cooldown = 0.5
+
+            -- this is used to scroll the inventory properly, it is a hack
+            player:get_inventory():set_size("main", 10)
+            player:hud_set_hotbar_itemcount(10)
+
+            attach_player_backpack_to_hand(player)
+
+            self.object:remove()
+        end
     end,
 
     -- when a backpack "wakes up"
@@ -494,13 +573,14 @@ end
 
 function player_has_backpack(player)
     local name = player:get_player_name()
-    return(players_backpacks[name] ~= nil)
+    return(player_backpacks[name] ~= nil)
 end
 
 minetest.register_on_joinplayer(function(player)
     local name = player:get_player_name()
 
     -- this is a debug and needs to be loaded from a mod save file
+    --[[
     if (not players_backpacks[name]) then
         players_backpacks[name] = {
             slot_1 = "",
@@ -519,17 +599,5 @@ minetest.register_on_joinplayer(function(player)
             set_player_backpack_visibility(player, true)
         end)
     end
+    ]]--
 end)
-
-
-allocate_drop_button(
-        function(itemstack,player,pos)
-
-            local name = player:get_player_name()
-
-            if (not player_is_climbing(player) and backpack_events[name] and backpack_events[name].stage == 3) then
-                print("detach backpack")
-                --backpack_events[name] = nil
-            end
-        end
-)
