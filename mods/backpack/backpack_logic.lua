@@ -417,12 +417,12 @@ register_globalstep(function(dtime)
 end)
 
 function get_player_backpack_event(player_name)
-    return backpack_events[player_name] and backpack_events[player_name].stage
+    return(backpack_events[player_name] and backpack_events[player_name].stage)
 end
 
 function player_has_backpack_open(player)
     local name = player:get_player_name()
-    return backpack_events[name] ~= nil
+    return(backpack_events[name] ~= nil)
 end
 
 minetest.register_on_joinplayer(function(player)
@@ -448,3 +448,10 @@ minetest.register_on_joinplayer(function(player)
         end)
     end
 end)
+
+
+allocate_drop_button(
+        function(itemstack,player,pos)
+            print("wow this works")
+        end
+)
