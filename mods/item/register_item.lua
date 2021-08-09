@@ -1,4 +1,7 @@
 local register_craftitem = minetest.register_craftitem
+local vector_add = vector.add
+local vector_multiply = vector.multiply
+local raycast = minetest.raycast
 
 --this is a wrapper for minetest.register_craftitem, this is implemented because it makes custom mechanics easier to implement
 function register_item(def)
@@ -22,8 +25,19 @@ function register_item(def)
     local on_place = nil
     
     if (editor_mode) then
-        on_place = function(itemstack, placer, pointed_thing)
-            print(dump(pointed_thing))
+        on_place = function(itemstack, player, pointed_thing)
+            local pos1 = vector_add(player:get_pos(), { x = 0, y = player:get_properties().eye_height, z = 0})
+            local pos2 = vector_add(pos1, vector_multiply(player:get_look_dir(), 20))
+            local points = raycast(pos1, pos2, false, false)
+
+
+            if (points) then
+                local pos = points:next()
+                if (pos) then
+                    pos = pos.intersection_point
+                    add_item(pos, itemstack:get_name(), player:get_look_horizontal())
+                end
+            end
         end
     end
 
@@ -33,5 +47,6 @@ function register_item(def)
         inventory_image = def.texture,
         wield_image = def.texture,
         wield_overlay = "invisible.png",
+        on_place = on_place
     })
 end
