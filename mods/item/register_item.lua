@@ -19,6 +19,13 @@ function register_item(def)
         groups.scale_z = 0.2
     end
 
+    local on_place = nil
+    
+    if (editor_mode) then
+        on_place = function(itemstack, placer, pointed_thing)
+            print(dump(pointed_thing))
+        end
+    end
 
     register_craftitem(":"..def.name,{
         description = def.description,
