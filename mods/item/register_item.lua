@@ -22,6 +22,10 @@ function register_item(def)
         groups.scale_z = 0.2
     end
 
+    if (def.hunger) then
+        groups.hunger = def.hunger
+    end
+
     local on_place
     
     if (editor_mode) then
