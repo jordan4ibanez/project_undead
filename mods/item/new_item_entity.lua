@@ -47,11 +47,11 @@ minetest.register_entity(":item", {
         -- check if player has free hand
         local inventory = player:get_inventory()
 
-        local stack_1 = player:get_wielded_item():get_name()
+        local stack_1 = inventory:get_stack("main", 1):get_name()
         local stack_2 = inventory:get_stack("secondary", 1):get_name()
 
         if (stack_1 == "") then
-            player:set_wielded_item(self.itemstring)
+            inventory:set_stack("main", 1, self.itemstring)
             self.object:remove()
             return
         elseif (stack_2 == "") then
