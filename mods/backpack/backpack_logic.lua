@@ -295,7 +295,7 @@ register_globalstep(function(dtime)
 
         -- check to see if player is trying to get to their backpack
         if (not event) then
-            if (get_if_player_reaching_for_backpack(player) and players_backpacks[name]) then
+            if (get_if_player_reaching_for_backpack(player) and players_backpacks[name] and not player_is_climbing(name)) then
                 backpack_events[name] = {stage = 1, timer = 0}
                 -- player is locked in place until they're holding their backpack
                 player:set_physics_override({speed = 0})
