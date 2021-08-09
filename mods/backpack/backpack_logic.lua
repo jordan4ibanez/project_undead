@@ -264,6 +264,8 @@ register_globalstep(function(dtime)
                     player:add_velocity(vector_multiply(velocity, -1))
 
                     -- reset the inventory, this is a hack
+                    -- this will crash the game when a player presses Q outside the hotbar/inventory location
+                    -- todo: fix this somehow
                     player:get_inventory():set_size("main", 1)
                     player:hud_set_hotbar_itemcount(1)
 
