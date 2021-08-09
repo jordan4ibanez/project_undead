@@ -114,6 +114,45 @@ minetest.register_entity(":backpack_gui_anchor_entity", {
         end
     end,
 
+    rebuild_slot = function(self,slot_number)
+
+        local name = self.owner:get_player_name()
+        local backpack_contents = players_backpacks[name]
+
+        local current_index = backpack_contents["slot_"..tostring(slot_number)]
+
+        if (current_index and current_index ~= "") then
+
+            -- clean up slot entity
+            local existing_entity = self["slot_"..tostring(slot_number)]
+            if (existing_entity and existing_entity:get_luaentity()) then
+                existing_entity:remove()
+            end
+
+            local x = slot_number - 3
+            local y = 1
+
+            if (slot_number > 5) then
+                x = slot_number - 5 - 3
+                y = 0
+            end
+
+            -- add new slot entity
+            local gui_entity = add_backpack_gui_entity(self.object:get_pos(), current_index)
+            if (gui_entity) then
+                gui_entity:set_attach(self.object, "", {x=x * 4,y=y*4,z=0}, {x=0,y=0,z=0}, true)
+                -- dynamically linked object reference
+                self["slot_"..tostring(slot_number)] = gui_entity
+            end
+        -- remove existing slot entity
+        elseif (not current_index or (current_index and current_index == "")) then
+            local existing_entity = self["slot_"..tostring(slot_number)]
+            if (existing_entity and existing_entity:get_luaentity()) then
+                existing_entity:remove()
+            end
+        end
+    end,
+
     on_step = function(self)
         if (self.owner and is_player(self.owner)) then
             local index = self.owner:get_wield_index()
@@ -297,6 +336,14 @@ register_globalstep(function(dtime)
             elseif (event.stage == 3) then
                 -- poll Q (drop) for dropping a backpack on the ground
 
+                -- the cool_down for swapping items in and out of the backpack
+                if (event.swap_cooldown) then
+                    event.swap_cooldown = event.swap_cooldown - dtime
+                    if (event.swap_cooldown <= 0) then
+                        event.swap_cooldown = nil
+                    end
+                end
+
                 -- player wants to put backpack away
                 if (get_if_player_reaching_for_backpack(player)) then
                     event.stage = 4
@@ -320,6 +367,40 @@ register_globalstep(function(dtime)
                     end
                     -- clean memory
                     event.gui_entity = nil
+                -- index if player wants to put/remove items from/into backpack
+                elseif (is_swapping_items_backpack(player) ~= 0 and not event.swap_cooldown) then
+                    local bits = is_swapping_items_backpack(player)
+
+                    local index = player:get_wield_index()
+
+                    if (bits > 0) then
+                        -- do the swap
+                        local inventory = player:get_inventory()
+
+                        local stack_1 = inventory:get_stack("main", 1):get_name()
+                        local stack_2 = players_backpacks[name]["slot_"..tostring(index)]
+
+                        inventory:set_stack("main", 1, stack_2)
+                        players_backpacks[name]["slot_"..tostring(index)] = stack_1
+
+                       event.gui_entity:get_luaentity():rebuild_slot(index)
+
+                        event.swap_cooldown = 0.25
+                    elseif (bits < 0) then
+
+                        -- do the swap
+                        local inventory = player:get_inventory()
+
+                        local stack_1 = inventory:get_stack("secondary", 1):get_name()
+                        local stack_2 = players_backpacks[name]["slot_"..tostring(index)]
+
+                        inventory:set_stack("secondary", 1, stack_2)
+                        players_backpacks[name]["slot_"..tostring(index)] = stack_1
+
+                        event.gui_entity:get_luaentity():rebuild_slot(index)
+
+                        event.swap_cooldown = 0.25
+                    end
                 end
             elseif (event.stage == 4 and event.timer >= 0.8) then
                 -- player's backpack is now back onto their back
