@@ -38,8 +38,8 @@ minetest.register_entity(":backpack_gui_anchor_entity", {
         hp_max           = 1,
         visual           = "sprite",
         physical         = false,
-        textures         = {"concrete.png"},
-        is_visible       = true,
+        textures         = {"invisible.png"},
+        is_visible       = false,
         pointable        = false,
         collide_with_objects = false,
         collisionbox = {0,0,0,0,0,0},
@@ -305,16 +305,16 @@ minetest.register_on_joinplayer(function(player)
     -- this is a debug and needs to be loaded from a mod save file
     if (not players_backpacks[name]) then
         players_backpacks[name] = {
-            slot_1 = "machine_gun",
-            slot_2 = "machine_gun",
-            slot_3 = "machine_gun",
-            slot_4 = "machine_gun",
-            slot_5 = "machine_gun",
-            slot_6 = "machine_gun",
-            slot_7 = "machine_gun",
-            slot_8 = "machine_gun",
-            slot_9 = "machine_gun",
-            slot_10 = "machine_gun"
+            slot_1 = "",
+            slot_2 = "",
+            slot_3 = "",
+            slot_4 = "",
+            slot_5 = "",
+            slot_6 = "",
+            slot_7 = "",
+            slot_8 = "",
+            slot_9 = "",
+            slot_10 = ""
         }
 
         minetest.after(0, function()
