@@ -31,6 +31,12 @@ minetest.register_entity(":backpack_gui_selection_entity", {
         visual_size  = {x = 0.4, y = 0.4},
     },
 
+    on_activate = function(self, staticdata, dtime_s)
+        -- do not bother with newly created items
+        if (dtime_s ~= 0) then
+            self.object:remove()
+        end
+    end
 })
 
 minetest.register_entity(":backpack_gui_anchor_entity", {
@@ -39,7 +45,7 @@ minetest.register_entity(":backpack_gui_anchor_entity", {
         visual           = "sprite",
         physical         = false,
         textures         = {"invisible.png"},
-        is_visible       = false,
+        is_visible       = true,
         pointable        = false,
         collide_with_objects = false,
         collisionbox = {0,0,0,0,0,0},
@@ -62,6 +68,13 @@ minetest.register_entity(":backpack_gui_anchor_entity", {
 
     old_index = 1,
 
+    on_activate = function(self, staticdata, dtime_s)
+        -- do not bother with newly created items
+        if (dtime_s ~= 0) then
+            self.object:remove()
+        end
+    end,
+
     -- slots are strings
     create_gui = function(self, player)
         self.owner = player
@@ -79,15 +92,16 @@ minetest.register_entity(":backpack_gui_anchor_entity", {
                 local gui_entity = add_backpack_gui_entity(pos, current_index)
                 if (gui_entity) then
                     gui_entity:set_attach(self.object, "", {x=x * 4,y=y*4,z=0}, {x=0,y=0,z=0}, true)
-                    if (i == 1) then
-                        local selection_entity = add_entity(pos, "backpack_gui_selection_entity")
-                        if (selection_entity) then
-                            selection_entity:set_attach(self.object, "", {x=x * 4,y=y*4,z=0}, {x=0,y=0,z=0}, true)
-                            self.selection_entity = selection_entity
-                        end
-                    end
                     -- dynamically linked object reference
                     self["slot_"..tostring(i)] = gui_entity
+                end
+            end
+
+            if (i == 1) then
+                local selection_entity = add_entity(pos, "backpack_gui_selection_entity")
+                if (selection_entity) then
+                    selection_entity:set_attach(self.object, "", {x=x * 4,y=y*4,z=0}, {x=0,y=0,z=0}, true)
+                    self.selection_entity = selection_entity
                 end
             end
 
@@ -153,6 +167,13 @@ minetest.register_entity(":backpack_gui_entity", {
         selectionbox = {0,0,0,0,0,0},
         visual_size  = {x = 0.2, y = 0.2},
     },
+
+    on_activate = function(self, staticdata, dtime_s)
+        -- do not bother with newly created items
+        if (dtime_s ~= 0) then
+            self.object:remove()
+        end
+    end,
 
     set_item = function(self, item)
         local stack = ItemStack(item or self.itemstring)

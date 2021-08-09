@@ -233,7 +233,7 @@ minetest.register_entity(":player_holding_item", {
         -- wielded item entity does not need to update often
         if (self.timer >= 0.25) then
 
-            local item = player:get_wielded_item():get_name()
+            local item = player:get_inventory():get_stack("main", 1):get_name()
 
             self.set_item(self,item)
         end
