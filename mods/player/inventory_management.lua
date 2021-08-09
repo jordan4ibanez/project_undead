@@ -36,6 +36,7 @@ register_globalstep(function(dtime)
         end
     end
 
+    -- lua vm should automatically optimize itself if no cool_down
     for index,time in pairs(cool_down) do
         cool_down[index] = time - dtime
 
