@@ -486,7 +486,7 @@ minetest.register_entity(":player_model",{
         local hitting = false
         local aiming = false
 
-        local holding_gun = get_item_group(player:get_wielded_item():get_name(), "gun") > 0
+        local holding_gun = get_item_group(player:get_inventory():get_stack("main", 1):get_name(), "gun") > 0
 
         local control_bits = player:get_player_control_bits()
 

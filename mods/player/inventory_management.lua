@@ -24,10 +24,10 @@ register_globalstep(function(dtime)
                     -- do the swap
                     local inventory = player:get_inventory()
 
-                    local stack_1 = player:get_wielded_item()
+                    local stack_1 = inventory:get_stack("main", 1)
                     local stack_2 = inventory:get_stack("secondary", 1)
 
-                    player:set_wielded_item(stack_2)
+                    inventory:set_stack("main", 1, stack_2)
                     inventory:set_stack("secondary", 1, stack_1)
 
                     cool_down[name] = 0.25
