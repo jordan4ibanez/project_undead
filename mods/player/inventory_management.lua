@@ -14,7 +14,6 @@ end
 
 local cool_down = {}
 
-
 register_globalstep(function(dtime)
     for _,player in pairs(get_connected_players()) do
         if (is_player_swapping(player)) then
@@ -46,4 +45,19 @@ register_globalstep(function(dtime)
     end
 end)
 
-
+allocate_drop_button(
+        function(itemstack,player,pos)
+            if (not player_has_backpack_open(player)) then
+                local inventory = player:get_inventory()
+                local stack = inventory:get_stack("main", 1)
+                local name = stack:get_name()
+                if (name ~= "") then
+                    local pos = player:get_pos()
+                    local yaw = player:get_look_horizontal()
+                    add_item(pos, name, yaw)
+                    stack:take_item(1)
+                    inventory:set_stack("main", 1, stack)
+                end
+            end
+        end
+)
