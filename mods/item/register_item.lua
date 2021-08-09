@@ -30,20 +30,22 @@ function register_item(def)
         groups.thirst = def.thirst
     end
 
-    local on_place
-    
-    if (editor_mode) then
-        on_place = function(itemstack, player, pointed_thing)
-            local pos1 = vector_add(player:get_pos(), { x = 0, y = player:get_properties().eye_height, z = 0})
-            local pos2 = vector_add(pos1, vector_multiply(player:get_look_dir(), 20))
-            local points = raycast(pos1, pos2, false, false)
+    local do_take = not editor_mode
+
+    local on_place = function(itemstack, player)
+        local pos1 = vector_add(player:get_pos(), { x = 0, y = player:get_properties().eye_height, z = 0})
+        local pos2 = vector_add(pos1, vector_multiply(player:get_look_dir(), 20))
+        local points = raycast(pos1, pos2, false, false)
 
 
-            if (points) then
-                local pos = points:next()
-                if (pos) then
-                    pos = pos.intersection_point
-                    add_item(pos, itemstack:get_name(), player:get_look_horizontal())
+        if (points) then
+            local pos = points:next()
+            if (pos) then
+                pos = pos.intersection_point
+                add_item(pos, itemstack:get_name(), player:get_look_horizontal())
+                if (do_take) then
+                    itemstack:take_item(1)
+                    return(itemstack)
                 end
             end
         end
