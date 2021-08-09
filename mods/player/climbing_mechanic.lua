@@ -264,7 +264,7 @@ register_globalstep(function(dtime)
                 end
             end
         -- do climb scanning
-        else
+        elseif (not player_has_backpack_open(player)) then
             -- a cache happy way to intercept player controls
             local initialize_climb = false
             local moving_forward = false
