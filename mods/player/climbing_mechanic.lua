@@ -5,7 +5,6 @@ local facedir_to_dir = minetest.facedir_to_dir
 local get_item_group = minetest.get_item_group
 local yaw_to_dir = minetest.yaw_to_dir
 local get_node = minetest.get_node
-local facedir_to_dir = minetest.facedir_to_dir
 local dir_to_yaw = minetest.dir_to_yaw
 local vector_add = vector.add
 local vector_direction = vector.direction
