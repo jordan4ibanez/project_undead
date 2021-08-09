@@ -26,6 +26,10 @@ function register_item(def)
         groups.hunger = def.hunger
     end
 
+    if (def.thirst) then
+        groups.thirst = def.thirst
+    end
+
     local on_place
     
     if (editor_mode) then
