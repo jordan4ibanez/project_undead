@@ -36,7 +36,7 @@ minetest.register_entity(":item", {
 
         self.object:set_properties({
             collisionbox = {0,0,0,0,0,0},
-            selectionbox = {-scale.x, 0, -scale.z, scale.x, scale.y * 2, scale.z},
+            selectionbox = {-scale.x, -scale.y, -scale.z, scale.x, scale.y, scale.z},
             visual_size = scale,
             textures = {itemname},
             wield_item = self.itemstring,
