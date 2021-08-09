@@ -1,4 +1,6 @@
 local add_entity = minetest.add_entity
+local serialize = minetest.serialize
+local deserialize = minetest.deserialize
 local registered_items = minetest.registered_items
 
 minetest.register_entity(":item", {
@@ -39,6 +41,37 @@ minetest.register_entity(":item", {
             textures = {itemname},
             wield_item = self.itemstring,
         })
+    end,
+
+    -- when an item "goes to sleep"
+    get_staticdata = function(self)
+        return serialize({
+            itemstring = self.itemstring,
+        })
+    end,
+
+    -- when an item "wakes up"
+    on_activate = function(self, staticdata, dtime_s)
+        -- do not bother with newly created items
+        if (dtime_s == 0) then
+            return
+        end
+
+        if string.sub(staticdata, 1, string.len("return")) == "return" then
+            local data = deserialize(staticdata)
+            if data and type(data) == "table" then
+                self.itemstring = data.itemstring
+            end
+        else
+            self.itemstring = staticdata
+        end
+
+        -- do not allow corrupted items to exist
+        if (not self.itemstring) then
+            self.object:remove()
+        end
+
+        self:set_item(self.itemstring)
     end,
 })
 
