@@ -380,6 +380,8 @@ register_globalstep(function(dtime)
                     backpack_events[name] = nil
                     set_player_backpack_visibility(player, false)
                     player_backpacks[name] = nil
+
+                    set_player_item_swap_cooldown(player, 0.5)
                 -- player wants to put backpack away
                 elseif (get_if_player_reaching_for_backpack(player)) then
                     event.stage = 4

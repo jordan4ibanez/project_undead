@@ -45,6 +45,11 @@ register_globalstep(function(dtime)
     end
 end)
 
+function set_player_item_swap_cooldown(player, time)
+    local name = player:get_player_name()
+    cool_down[name] = time
+end
+
 allocate_drop_button(
         function(itemstack,player,pos)
             if (not player_has_backpack_open(player)) then
