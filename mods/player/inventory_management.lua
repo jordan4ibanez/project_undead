@@ -43,8 +43,6 @@ register_globalstep(function(dtime)
         if (cool_down[index] <= 0) then
             cool_down[index] = nil
         end
-
-        print(cool_down[index])
     end
 end)
 
