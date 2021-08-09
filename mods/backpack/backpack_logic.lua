@@ -416,6 +416,73 @@ register_globalstep(function(dtime)
     end
 end)
 
+
+minetest.register_entity(":backpack_ground", {
+    initial_properties = {
+        hp_max           = 1,
+        visual           = "wielditem",
+        physical         = false,
+        textures         = {"backpack"},
+        is_visible       = false,
+        pointable        = false,
+        collide_with_objects = false,
+        collisionbox = {0, 0, 0, 0, 0, 0},
+        selectionbox = {0, 0, 0, 0, 0, 0},
+        -- this should be 1/1.1 but that does not work properly
+        visual_size  = {x = 0.7, y = 0.7},
+    },
+
+    slot_1 = "",
+    slot_2 = "",
+    slot_3 = "",
+    slot_4 = "",
+    slot_5 = "",
+    slot_6 = "",
+    slot_7 = "",
+    slot_8 = "",
+    slot_9 = "",
+    slot_10 = "",
+
+    -- when a backpack "goes to sleep"
+    get_staticdata = function(self)
+        return serialize({
+            slot_1 = self.slot_1,
+            slot_2 = self.slot_2,
+            slot_3 = self.slot_3,
+            slot_4 = self.slot_4,
+            slot_5 = self.slot_5,
+            slot_6 = self.slot_6,
+            slot_7 = self.slot_7,
+            slot_8 = self.slot_8,
+            slot_9 = self.slot_9,
+            slot_10 = self.slot_10,
+        })
+    end,
+
+    -- when a backpack "wakes up"
+    on_activate = function(self, staticdata, dtime_s)
+        if string.sub(staticdata, 1, string.len("return")) == "return" then
+            local data = deserialize(staticdata)
+            if data and type(data) == "table" then
+                self.itemstring = data.itemstring
+                self.slot_1 = data.slot_1
+                self.slot_2 = data.slot_2
+                self.slot_3 = data.slot_3
+                self.slot_4 = data.slot_4
+                self.slot_5 = data.slot_5
+                self.slot_6 = data.slot_6
+                self.slot_7 = data.slot_7
+                self.slot_8 = data.slot_8
+                self.slot_9 = data.slot_9
+                self.slot_10 = data.slot_10
+            end
+        -- a corrupted backpack
+        elseif (dtime_s ~= 0) then
+            self.object:remove()
+        end
+    end,
+})
+
 function get_player_backpack_event(player_name)
     return(backpack_events[player_name] and backpack_events[player_name].stage)
 end
@@ -423,6 +490,11 @@ end
 function player_has_backpack_open(player)
     local name = player:get_player_name()
     return(backpack_events[name] ~= nil)
+end
+
+function player_has_backpack(player)
+    local name = player:get_player_name()
+    return(players_backpacks[name] ~= nil)
 end
 
 minetest.register_on_joinplayer(function(player)
@@ -452,6 +524,12 @@ end)
 
 allocate_drop_button(
         function(itemstack,player,pos)
-            print("wow this works")
+
+            local name = player:get_player_name()
+
+            if (not player_is_climbing(player) and backpack_events[name] and backpack_events[name].stage == 3) then
+                print("detach backpack")
+                --backpack_events[name] = nil
+            end
         end
 )
