@@ -26,27 +26,32 @@ end
 
 function player_climbing_over(player_name)
     local event = climb_event[player_name]
-    return event ~= nil and event.type == "climb_over"
+    return(event ~= nil and event.type == "climb_over")
 end
 
 function player_climbing_ladder(player_name)
     local event = climb_event[player_name]
-    return event ~= nil and (event.type == "up_ladder" or event.type == "down_ladder")
+    return (event ~= nil and (event.type == "up_ladder" or event.type == "down_ladder"))
 end
 
 function player_on_ladder(player_name)
     local event = climb_event[player_name]
-    return event ~= nil and event.type == "on_ladder"
+    return(event ~= nil and event.type == "on_ladder")
 end
 
 function player_climbing_off_ladder(player_name)
     local event = climb_event[player_name]
-    return event ~= nil and event.type == "climb_off_ladder"
+    return(event ~= nil and event.type == "climb_off_ladder")
 end
 
 function player_climbing_onto_ladder_from_top(player_name)
     local event = climb_event[player_name]
-    return event ~= nil and event.type == "onto_ladder_from_top"
+    return(event ~= nil and event.type == "onto_ladder_from_top")
+end
+
+function player_is_climbing(player_name)
+    local event = climb_event[player_name]
+    return(event ~= nil)
 end
 
 local function get_ladder_climbing_controls(player)
