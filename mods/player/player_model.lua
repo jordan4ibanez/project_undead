@@ -98,6 +98,10 @@ local backpack_put_away_stage_2_end = 445
 local models = {}
 
 local function is_moving_with_backpack(player)
+
+    -- this is a process of elimination or a bit detector
+    -- do not simplify this
+
     local control_bits = player:get_player_control_bits()
 
     -- zoom
