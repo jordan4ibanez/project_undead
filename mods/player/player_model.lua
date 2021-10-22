@@ -247,15 +247,39 @@ minetest.register_entity(":player_holding_item", {
             local player = get_player_by_name(self.attached_player)
             local player_aiming = player_is_aiming(player)
             if (player_aiming and not self.aim_adjusted and not player_has_backpack_open(player) and not player_is_climbing(self.attached_player)) then
+
+
+
+            
+                --[[
+                    Important:
+
+                    this must be un-hardcoded
+
+                    this must read from the zoom in the gun's sight/scope that's equipped
+                    or
+                    if no gun sight/scope is equipped read from the gun itself
+                ]]
+
+
+                --print("aiming up")
+                player:set_fov(0.5, true, 0.2)
+
                 local attached,_ = self.object:get_attach()
                 self.object:set_attach(attached,"Arm_Right", {x=0.5,y=6,z=1}, {x=90,y=0,z=-75}, true)
                 self.aim_adjusted = true
             elseif (not player_aiming and self.aim_adjusted) then
+                --print("aiming down")
+                player:set_fov(1, true, 0.2)
+
                 local attached,_ = self.object:get_attach()
                 self.object:set_attach(attached,"Arm_Right", {x=0,y=6,z=1}, {x=90,y=0,z=-90}, true)
                 self.aim_adjusted = false
             end
         elseif (self.aim_adjusted) then
+            --print("aiming down 2")
+            player:set_fov(1, true, 0.2)
+
             local attached,_ = self.object:get_attach()
             self.object:set_attach(attached,"Arm_Right", {x=0,y=6,z=1}, {x=90,y=0,z=-90}, true)
             self.aim_adjusted = false
@@ -580,8 +604,8 @@ minetest.register_entity(":player_model",{
 
         -- digest player pitch when aiming to move arms
         if (aiming) then
-            self.object:set_bone_position("Arm_Left_Base",{x = 0, y = 5.25, z = -1.5}, {x = player:get_look_vertical() * -50, y = 0, z = 0})
-            self.object:set_bone_position("Arm_Right_Base",{x = 0, y = 5.25, z = -1.5}, {x = player:get_look_vertical() * -50, y = 0, z = 0})
+            self.object:set_bone_position("Arm_Left_Base",{x = 0, y = 5.25, z = 0}, {x = player:get_look_vertical() * -50, y = 0, z = 0})
+            self.object:set_bone_position("Arm_Right_Base",{x = 0, y = 5.25, z = 0}, {x = player:get_look_vertical() * -50, y = 0, z = 0})
             self.was_aiming = true
         elseif (self.was_aiming) then
             self.object:set_bone_position("Arm_Left_Base",{x = 0, y = 5.25, z = 0}, {x = 0, y = 0, z = 0})
